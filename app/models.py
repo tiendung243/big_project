@@ -10,9 +10,9 @@ class Category(models.Model):
         return self.name
 
 
-class Post(models.Model):
+class Question(models.Model):
 
-    class PostObject(models.Manager):
+    class QuestionObject(models.Manager):
         def get_queryset(self):
             return super().get_queryset().filter(status='published')
 
@@ -26,15 +26,15 @@ class Post(models.Model):
     excerpt = models.TextField(null=True)
     content = models.TextField()
     slug = models.SlugField(max_length=250, unique_for_date='published')
-    published = models.DateTimeField(default=timezone.now())
+    published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
     status = models.CharField(max_length=10, choices=options, default='draft')
     objects = models.Manager()
-    postobjects = PostObject()
+    questionObjects = QuestionObject()
 
     class Meta:
         ordering = ('-published',)
-        managed = False
+        managed = True
 
     def __str__(self):
         return self.title

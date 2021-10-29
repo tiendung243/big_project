@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from rest_framework import generics
 from .models import *
 
-from .serializers import PostSerializer
+from .serializers import QuestionSerializer
 
 
 class Test(TemplateView):
@@ -11,10 +11,10 @@ class Test(TemplateView):
 
 
 class PostList(generics.ListCreateAPIView):
-    queryset = Post.postobjects.all()
-    serializer_class = PostSerializer
+    queryset = Question.questionObjects.all()
+    serializer_class = QuestionSerializer
 
 
 class PostDetail(generics.RetrieveDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer

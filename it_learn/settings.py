@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'it_learn.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'itlearn2',
+        'NAME': 'itlearn4',
         'USER': 'tiendung',
         'PASSWORD': '2431999',
         'HOST': 'localhost',
