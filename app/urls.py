@@ -1,9 +1,13 @@
 from django.urls import path
-from .views import PostList, PostDetail
+from .views import QuestionList, QuestionDetail
+from rest_framework.routers import DefaultRouter
 
 app_name = 'app'
 
-urlpatterns = [
-    path('<int:pk>/', PostDetail.as_view(), name='detailcreate'),
-    path('', PostList.as_view(), name='listcreate')
-]
+router = DefaultRouter()
+router.register('', QuestionList, basename='question')
+urlpatterns = router.urls
+# urlpatterns = [
+#     path('<int:pk>/', QuestionDetail.as_view(), name='detailcreate'),
+#     path('', QuestionList.as_view(), name='listcreate')
+# ]

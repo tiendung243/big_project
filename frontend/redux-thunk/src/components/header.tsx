@@ -1,4 +1,5 @@
 import React from 'react';
+import './header.css';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -7,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
@@ -47,6 +49,10 @@ function Header() {
 							Blog
 						</Link>
 					</Typography>
+					<Input
+						disableUnderline={true}
+
+					/>
 					<nav>
 						<Link
 							color="textPrimary"
