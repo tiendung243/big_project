@@ -28,7 +28,7 @@ class Question(models.Model):
     slug = models.SlugField(max_length=250, unique_for_date='published')
     published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
-    status = models.CharField(max_length=10, choices=options, default='draft')
+    status = models.CharField(max_length=10, choices=options, default='published')
     objects = models.Manager()
     questionObjects = QuestionObject()
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../axios';
+import axiosInstance from '../../axios';
 import { useParams } from 'react-router-dom';
 //MaterialUI
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,9 +17,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Post() {
-	const { slug } : {slug : string}= useParams();
+	const { id } : {id : string} = useParams();
 	const classes = useStyles();
-
+	console.log("detail");
 
     interface Ipost {
         posts: {
@@ -31,7 +31,7 @@ export default function Post() {
 	const [data, setData] = useState<Ipost>({ posts:{title:'', excerpt:''}});
 
 	useEffect(() => {
-		axiosInstance.get(slug).then((res) => {
+		axiosInstance.get('post/' + id).then((res) => {
 			setData({ posts: res.data });
 			console.log(res.data);
 		});

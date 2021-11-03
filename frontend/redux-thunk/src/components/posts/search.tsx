@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axiosInstance from '../../axios';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -33,27 +35,45 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: 'left',
 		marginBottom: theme.spacing(2),
 	},
-    card : {
-    },
-    cardContent : {}
 }));
 
-const Posts = (props:any) => {
-	const { posts } = props;
+const Search = () => {
 	const classes = useStyles();
-	if (!posts || posts.length === 0) return <p>Can not find any posts, sorry</p>;
+	const search = 'search';
+    interface IPost {
+        id: number,
+        slug: string,
+        title: string,
+        excerpt: string,
+    }
+    interface IAppState {
+        search: string,
+        posts: Array<IPost>,
+    }
+	const [appState, setAppState] = useState<IAppState>({
+		search: '',
+		posts: [],
+	});
+
+	useEffect(() => {
+		axiosInstance.get(search + '/' + window.location.search).then((res) => {
+			const allPosts:Array<IPost> = res.data;
+			setAppState({...appState, posts: allPosts });
+		});
+	}, [setAppState]);
+
 	return (
 		<React.Fragment>
 			<Container maxWidth="md" component="main">
 				<Grid container spacing={5} alignItems="flex-end">
-					{posts.map((post:any) => {
+					{appState.posts.map((post) => {
 						return (
 							// Enterprise card is full width at sm breakpoint
 							<Grid item key={post.id} xs={12} md={4}>
-								<Card className={classes.card}>
+								<Card>
 									<Link
 										color="textPrimary"
-										href={'post/' + post.slug}
+										href={'/post/' + post.slug}
 										className={classes.link}
 									>
 										<CardMedia
@@ -62,7 +82,7 @@ const Posts = (props:any) => {
 											title="Image title"
 										/>
 									</Link>
-									<CardContent className={classes.cardContent}>
+									<CardContent>
 										<Typography
 											gutterBottom
 											variant="h6"
@@ -73,7 +93,7 @@ const Posts = (props:any) => {
 										</Typography>
 										<div className={classes.postText}>
 											<Typography color="textSecondary">
-												{post.excerpt.substr(0, 60)}...
+												{post.excerpt.substr(0, 40)}...
 											</Typography>
 										</div>
 									</CardContent>
@@ -86,4 +106,4 @@ const Posts = (props:any) => {
 		</React.Fragment>
 	);
 };
-export default Posts;
+export default Search;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseURL = 'http://127.0.0.1:8000/api/';
+const baseURL = 'http://127.0.0.1:8000/';
 
 let axiosInstance = axios.create({
     baseURL: baseURL,
@@ -51,7 +51,7 @@ axiosInstance.interceptors.response.use(
 
 				if (tokenParts.exp > now) {
 					return axiosInstance
-						.post('/token/refresh/', { refresh: refreshToken })
+						.post('api/token/refresh/', { refresh: refreshToken })
 						.then((response) => {
 							localStorage.setItem('access_token', response.data.access);
 							localStorage.setItem('refresh_token', response.data.refresh);

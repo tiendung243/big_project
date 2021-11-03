@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './header.css';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,7 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
-import Input from '@material-ui/core/Input';
+import SearchBar from 'material-ui-search-bar';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
@@ -24,6 +25,15 @@ const useStyles = makeStyles((theme) => ({
 
 function Header() {
 	const classes = useStyles();
+	let history = useHistory();
+	const [data, setData] = useState({ search: '' });
+	const goSearch = (e:any) => {
+		history.push({
+			pathname: '/search/',
+			search: '?search=' + data.search,
+		});
+		window.location.reload();
+	};
 	return (
 		<React.Fragment>
 			<CssBaseline />
@@ -49,9 +59,10 @@ function Header() {
 							Blog
 						</Link>
 					</Typography>
-					<Input
-						disableUnderline={true}
-
+					<SearchBar
+						value={data.search}
+						onChange={(newValue) => setData({ search: newValue })}
+						onRequestSearch={() => goSearch(data.search)}
 					/>
 					<nav>
 						<Link
