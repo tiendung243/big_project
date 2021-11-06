@@ -45,7 +45,7 @@ export default function Create() {
 	const [formData, updateFormData] = useState(initialFormData);
 
 	const handleChange = (e:any) => {
-        if (e.target.name == 'title') {
+        if (e.target.name === 'title') {
 			updateFormData({
 				...formData,
 				// Trimming any whitespace

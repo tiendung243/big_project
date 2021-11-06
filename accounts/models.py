@@ -4,6 +4,9 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 
+def upload_to(instance, filename):
+    return f'users/{filename}'
+
 class CustomAccountManager(BaseUserManager):
 
     def create_superuser(self, email, user_name, first_name, password, **other_fields):
@@ -42,6 +45,7 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
     start_date = models.DateTimeField(default=timezone.now)
     about = models.TextField(_(
         'about'), max_length=500, blank=True)
+    image = models.ImageField(_('Image',), upload_to=upload_to, default='users/default.jpg')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
