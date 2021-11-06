@@ -31,6 +31,7 @@ class Question(models.Model):
     status = models.CharField(max_length=10, choices=options, default='published')
     objects = models.Manager()
     questionObjects = QuestionObject()
+    number_comment = models.IntegerField(default=0)
 
     class Meta:
         ordering = ('-published',)
@@ -38,4 +39,18 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+
+    def __str__(self):
+        return self.content
+
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    content = models.TextField()
+    created = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
+    upvote = models.IntegerField(default=0)
+    down_vote = models.IntegerField(default=0)
+    parent_comment = models.ForeignKey('Comment', on_delete=models.CASCADE, blank=True, null=True)
 

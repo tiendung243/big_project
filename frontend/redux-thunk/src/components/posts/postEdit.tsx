@@ -55,7 +55,7 @@ export default function Edit() {
 	}, [updateFormData]);
 
 	const handleChange = (e:any) => {
-		if (e.target.name == 'title') {
+		if (e.target.name === 'title') {
 			updateFormData({
 				...formData,
 				// Trimming any whitespace

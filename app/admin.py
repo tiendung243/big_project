@@ -8,4 +8,9 @@ class AuthorAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 
+@admin.register(Comment)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('content', 'question', 'author', 'parent_comment')
+
+
 admin.site.register(Category)
