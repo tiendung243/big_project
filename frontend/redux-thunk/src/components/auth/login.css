@@ -1,0 +1,19 @@
+.RootContent .MuiContainer-maxWidthXs {
+    max-width: 100000px !important;
+}
+
+.RootContent .MuiContainer-root {
+    margin-left: 200px !important;
+    padding-left: 0!important;
+    padding-right: 0!important;
+    flex-grow: 1;
+}
+
+.App .MuiContainer-root {
+    margin: auto !important;
+  }
+
+form {
+    width: 444px;
+    margin: auto;
+}

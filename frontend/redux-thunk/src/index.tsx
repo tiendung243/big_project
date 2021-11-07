@@ -13,21 +13,25 @@ import Single from './components/posts/postDetail';
 import Search from './components/posts/search';
 import Edit from './components/posts/postEdit';
 import Create from './components/posts/postCreate';
+import LeftBar from './components/leftBar';
 
 const routing = (
   <Router>
     <React.StrictMode>
       <Header />
-      <Switch>
-        <Route exact path="/" component={App}/>
-        <Route path="/register" component={Register}/>
-        <Route path="/login" component={Login}/>
-        <Route path="/logout" component={Logout}/>
-        <Route path="/search" component={Search} />
-        <Route exact path="/post/create" component={Create} />
-        <Route exact path="/post/:id" component={Single}/>
-        <Route exact path="/post/edit/:id" component={Edit} />
-      </Switch>
+      <div className="RootContent">
+        <LeftBar/>
+        <Switch>
+          <Route exact path="/" component={App}/>
+          <Route path="/register" component={Register}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/logout" component={Logout}/>
+          <Route path="/search" component={Search} />
+          <Route exact path="/post/create" component={Create} />
+          <Route exact path="/post/:id" component={Single}/>
+          <Route exact path="/post/edit/:id" component={Edit} />
+        </Switch>
+      </div>
       <Footer />
     </React.StrictMode>
   </Router>

@@ -14,6 +14,8 @@ import { useHistory } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
 	appBar: {
 		borderBottom: `1px solid ${theme.palette.divider}`,
+		position: 'sticky',
+		top: 0
 	},
 	link: {
 		margin: theme.spacing(1, 1.5),
