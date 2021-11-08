@@ -1,34 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../axios';
 import { useParams } from 'react-router-dom';
+import './postDetail.css';
 //MaterialUI
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-
-const useStyles = makeStyles((theme) => ({
-	paper: {
-		marginTop: theme.spacing(8),
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-	},
-}));
+import ButtonAddQuestion from '../atoms/addQuestion';
+import VotePoint from '../atoms/votePoint';
+import CommentContent from '../atoms/commentContent';
+import QuestionTag from '../atoms/tag';
 
 export default function Post() {
 	const { id } : {id : string} = useParams();
-	const classes = useStyles();
 	console.log("detail");
 
     interface Ipost {
         posts: {
             title: string,
-            excerpt: string
+            excerpt: string,
+			content: string
         }
     };
 
-	const [data, setData] = useState<Ipost>({ posts:{title:'', excerpt:''}});
+	const [data, setData] = useState<Ipost>({ posts:{title:'', excerpt:'', content: ''}});
 
 	useEffect(() => {
 		axiosInstance.get('post/' + id).then((res) => {
@@ -39,28 +32,27 @@ export default function Post() {
 
 	return (
 		<Container component="main" maxWidth="md">
-			<CssBaseline />
-			<div className={classes.paper}></div>
-			<div>
-				<Container maxWidth="sm">
-					<Typography
-						component="h1"
-						variant="h2"
-						align="center"
-						color="textPrimary"
-						gutterBottom
-					>
-						{data.posts.title}
-					</Typography>
-					<Typography
-						variant="h5"
-						align="center"
-						color="textSecondary"
-						paragraph
-					>
-						{data.posts.excerpt}
-					</Typography>
-				</Container>
+			<div className="PostDetail">
+				<div className="PostDetail-header">
+					<div className="header-left">
+						<p className='header-title'>{data.posts.title}</p>
+						<div className="question-info">
+							<p> Asked 7 years, 6 months ago</p>
+							<p>Viewed 58k times</p>
+						</div>
+					</div>
+					<div className="header-right">
+						<ButtonAddQuestion />
+					</div>
+				</div>
+				<div className="QuestionContent">
+					<VotePoint />
+					<CommentContent />
+				</div>
+				<div className="TagContainer">
+					<QuestionTag name="javascript" />
+					<QuestionTag name="nodejs" />
+				</div>
 			</div>
 		</Container>
 	);

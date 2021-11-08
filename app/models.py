@@ -25,16 +25,22 @@ class Question(models.Model):
     title = models.CharField(max_length=250)
     excerpt = models.TextField(null=True)
     content = models.TextField()
-    slug = models.SlugField(max_length=250, unique_for_date='published')
-    published = models.DateTimeField(default=timezone.now)
+    slug = models.SlugField(max_length=250, unique_for_date='created')
+    created = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
     status = models.CharField(max_length=10, choices=options, default='published')
     objects = models.Manager()
     questionObjects = QuestionObject()
     number_comment = models.IntegerField(default=0)
+    view = models.IntegerField(default=0)
+    upvote = models.IntegerField(default=0)
+    down_vote = models.IntegerField(default=0)
+    last_update = models.DateTimeField(default=timezone.now)
+    number_bookmarked = models.IntegerField(default=0)
+    number_comment = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ('-published',)
+        ordering = ('-created',)
         managed = True
 
     def __str__(self):
@@ -53,4 +59,7 @@ class Comment(models.Model):
     upvote = models.IntegerField(default=0)
     down_vote = models.IntegerField(default=0)
     parent_comment = models.ForeignKey('Comment', on_delete=models.CASCADE, blank=True, null=True)
+    confirmed = models.BooleanField(default=False)
+    last_update = models.DateTimeField(default=timezone.now)
+
 

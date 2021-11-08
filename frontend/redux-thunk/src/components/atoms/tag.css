@@ -1,0 +1,8 @@
+.QuestionTag {
+    margin: 5px;
+}
+.QuestionTag p{
+    background-color: gray;
+    padding: 1px 5px;
+    border-radius: 2px;
+}

@@ -5,8 +5,9 @@ from .models import *
 from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, \
     BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
+from rest_framework.decorators import action, api_view, permission_classes
 from django.shortcuts import get_object_or_404
-from .serializers import QuestionSerializer
+from .serializers import QuestionSerializer, CommentSerializer
 from rest_framework import filters
 
 
@@ -85,3 +86,34 @@ class DeleteQuestion(generics.DestroyAPIView):
     permission_classes = [PostUserWritePermission]
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+
+
+def comment_instance_to_list(comment):
+    comment_dict = {'id': comment.id, 'content': comment.content, 'created': str(comment.created),
+                    'upvote': comment.upvote, 'downvote': comment.down_vote}
+    author = comment.author
+    comment_dict['author'] = [author.id, author.first_name, str(author.image)]
+    return comment_dict
+
+
+@api_view()
+@permission_classes([AllowAny])
+def get_comments(request, question_id=None):
+    comments = Comment.objects.filter(question=question_id, parent_comment=None).prefetch_related('comment_set')
+    comment_dicts = []
+    for comment in comments:
+        comment_dict = comment_instance_to_list(comment)
+        child_comments = comment.comment_set.all()
+        list_child_comments = []
+        for child_comment in child_comments:
+            list_child_comment = comment_instance_to_list(child_comment)
+            list_child_comments.append(list_child_comment)
+
+        comment_dict['comment_set'] = list_child_comments
+        comment_dicts.append(comment_dict)
+
+    return Response({'data': comment_dicts})
+
+
+
+

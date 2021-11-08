@@ -11,9 +11,11 @@
 
 .App .MuiContainer-root {
     margin: auto !important;
-  }
+}
 
 form {
     width: 444px;
     margin: auto;
 }
+
+/* https://meta.stackoverflow.com/questions/251361/how-do-i-format-my-code-blocks */

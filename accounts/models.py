@@ -42,12 +42,14 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     user_name = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
     start_date = models.DateTimeField(default=timezone.now)
     about = models.TextField(_(
         'about'), max_length=500, blank=True)
     image = models.ImageField(_('Image',), upload_to=upload_to, default='users/default.jpg')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    use_full_comment = models.IntegerField(default=0)
 
     objects = CustomAccountManager()
 

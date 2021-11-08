@@ -1,0 +1,9 @@
+.CommentContent {
+    padding-top: 8px;
+    margin-left: 15px;
+    font-size: 16px;
+}
+
+.CommentContent p{
+    margin: 0 !important;
+} 

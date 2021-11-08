@@ -15,6 +15,7 @@ import TableRow from '@material-ui/core/TableRow';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Button from '@material-ui/core/Button';
+import ButtonAddQuestion from '../atoms/addQuestion'
 
 const useStyles = makeStyles((theme) => ({
 	cardMedia: {
@@ -130,13 +131,7 @@ const Posts = (props:any) => {
 								})}
 								<TableRow>
 									<TableCell colSpan={4} align="right">
-										<Button
-											href={'/post/create'}
-											variant="contained"
-											color="primary"
-										>
-											New Post
-										</Button>
+										<ButtonAddQuestion />
 									</TableCell>
 								</TableRow>
 							</TableBody>

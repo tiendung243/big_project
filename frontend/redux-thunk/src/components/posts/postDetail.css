@@ -1,0 +1,45 @@
+.PostDetail{
+    margin-left: 25px;
+}
+
+.PostDetail-header {
+    display: flex;
+    margin-top: 20px;
+    border-bottom: 1px solid rgb(223, 223, 223);
+}
+
+.PostDetail-header .header-left{
+    flex-grow: 1;
+}
+
+.PostDetail-header .header-left .header-title{
+    flex-grow: 1;
+    font-size: 25px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+}
+
+.PostDetail-header .header-left .question-info{
+    display: flex;
+}
+
+.PostDetail-header .header-left .question-info p{
+    margin-right: 30px;
+    font-size: 12px;
+}
+
+
+.PostDetail-header .header-right{
+    width: 150px;
+    margin-top: 5px;
+}
+
+.QuestionContent {
+    display: flex;
+}
+
+.TagContainer {
+    display: flex;
+    margin-left: 45px;
+}

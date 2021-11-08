@@ -1,0 +1,12 @@
+.VotePoint {
+    display: flex;
+    flex-direction: column;
+    width: 35px !important;
+    text-align: center;
+}
+
+svg {
+    width: 38px !important;
+    height: 38px !important;
+    color: #5a5a5a !important;
+}

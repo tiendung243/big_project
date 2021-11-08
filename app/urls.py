@@ -1,13 +1,10 @@
-from django.urls import path
-from .views import QuestionList, QuestionDetail, QuestionListDetailFilter, CreateQuestion, EditQuestion, DeleteQuestion
-
-# from rest_framework.routers import DefaultRouter
+from django.urls import path, include
+from .views import QuestionList, QuestionDetail, QuestionListDetailFilter, CreateQuestion, EditQuestion, DeleteQuestion \
+    , get_comments
+from rest_framework.routers import DefaultRouter
 
 app_name = 'app'
 
-# router = DefaultRouter()
-# router.register('', QuestionList, basename='question')
-# urlpatterns = router.urls
 urlpatterns = [
     path('', QuestionList.as_view(), name='list_latest_post'),
     path('search/', QuestionListDetailFilter.as_view(), name='post_search'),
@@ -16,6 +13,7 @@ urlpatterns = [
     path('post/create/', CreateQuestion.as_view(), name='create_post'),
     path('post/edit/<int:pk>/', EditQuestion.as_view(), name='edit_post'),
     path('post/delete/<int:pk>/', DeleteQuestion.as_view(), name='delete_post'),
+    path('comments/<int:question_id>/', get_comments)
 ]
 
 """ Concrete View Classes
