@@ -5,9 +5,8 @@ import './postDetail.css';
 //MaterialUI
 import Container from '@material-ui/core/Container';
 import ButtonAddQuestion from '../atoms/addQuestion';
-import VotePoint from '../atoms/votePoint';
-import CommentContent from '../atoms/commentContent';
-import QuestionTag from '../atoms/tag';
+import QuestionTop from '../molecules/Question';
+import Comment from '../molecules/Comment';
 
 export default function Post() {
 	const { id } : {id : string} = useParams();
@@ -17,11 +16,12 @@ export default function Post() {
         posts: {
             title: string,
             excerpt: string,
-			content: string
+			content: string,
+			numberComment: number
         }
     };
 
-	const [data, setData] = useState<Ipost>({ posts:{title:'', excerpt:'', content: ''}});
+	const [data, setData] = useState<Ipost>({ posts:{title:'', excerpt:'', content: '', numberComment: 0}});
 
 	useEffect(() => {
 		axiosInstance.get('post/' + id).then((res) => {
@@ -45,14 +45,9 @@ export default function Post() {
 						<ButtonAddQuestion />
 					</div>
 				</div>
-				<div className="QuestionContent">
-					<VotePoint />
-					<CommentContent />
-				</div>
-				<div className="TagContainer">
-					<QuestionTag name="javascript" />
-					<QuestionTag name="nodejs" />
-				</div>
+				<QuestionTop />
+				<h2> {data.posts.numberComment} Answers</h2>
+				<Comment />
 			</div>
 		</Container>
 	);

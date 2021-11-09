@@ -1,0 +1,10 @@
+.ChildComment p {
+    display: inline;
+}
+
+.ChildComment{
+    min-height: 40px;
+    border-top: 1px solid #dfd9d9;
+    margin-bottom: 5px;
+    padding-top: 5px;
+}

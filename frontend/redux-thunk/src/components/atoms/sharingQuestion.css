@@ -1,0 +1,9 @@
+.SharingQuestion {
+    margin-left: 50px;
+    flex-grow: 1;
+}
+
+.SharingQuestion a{
+    text-decoration: none;
+    padding-right: 10px;
+}

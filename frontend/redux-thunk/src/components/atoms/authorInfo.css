@@ -1,0 +1,28 @@
+.AuthorInfo {
+    width: 200px;
+    background: #b8b8f3;
+    border-radius: 2px;
+}
+
+.AuthorInfo .AuthorInfo-image {
+    display: flex;
+    margin-left: 5px;
+}
+
+.AuthorInfo .AuthorInfo-time {
+    margin-left: 5px;
+}
+
+
+.AuthorInfo .AuthorInfo-image p{
+    margin: 0;
+}
+
+.AuthorInfo img{
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
