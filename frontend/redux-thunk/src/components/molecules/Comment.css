@@ -1,0 +1,19 @@
+.ReplyCreate {
+    border-top: 1px solid #dfd9d9;
+    font-size: 13px;
+    color: rgb(74, 74, 221);
+    cursor: pointer;
+}
+
+.ReplyCreate p {
+    margin-top: 5px !important;
+}
+
+.form_reply {
+    width: 50% !important;
+    margin-left: 0;
+}
+
+.post_reply {
+    width: 100%;
+}

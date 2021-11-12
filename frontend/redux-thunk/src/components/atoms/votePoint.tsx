@@ -15,7 +15,7 @@ function VotePoint(props:any) {
     return (
         <div className="VotePoint">
             <ArrowDropUpIcon onClick={upvote}/>
-            126
+            {props.number_vote}
             <ArrowDropDownIcon onClick={downvote}/>
         </div>
     )

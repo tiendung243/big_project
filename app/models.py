@@ -29,8 +29,6 @@ class Question(models.Model):
     created = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
     status = models.CharField(max_length=10, choices=options, default='published')
-    objects = models.Manager()
-    questionObjects = QuestionObject()
     number_comment = models.IntegerField(default=0)
     view = models.IntegerField(default=0)
     upvote = models.IntegerField(default=0)
@@ -38,6 +36,9 @@ class Question(models.Model):
     last_update = models.DateTimeField(default=timezone.now)
     number_bookmarked = models.IntegerField(default=0)
     number_comment = models.IntegerField(default=0)
+
+    objects = models.Manager()
+    questionObjects = QuestionObject()
 
     class Meta:
         ordering = ('-created',)

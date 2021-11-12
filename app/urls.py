@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import QuestionList, QuestionDetail, QuestionListDetailFilter, CreateQuestion, EditQuestion, DeleteQuestion \
-    , get_comments
-from rest_framework.routers import DefaultRouter
+    , get_comments, get_question
+from . import views
 
 app_name = 'app'
 
@@ -9,11 +9,14 @@ urlpatterns = [
     path('', QuestionList.as_view(), name='list_latest_post'),
     path('search/', QuestionListDetailFilter.as_view(), name='post_search'),
     #     crud question
-    path('post/<int:pk>/', QuestionDetail.as_view(), name='detail_post'),
+    path('post/<int:question_id>/', views.get_question),
     path('post/create/', CreateQuestion.as_view(), name='create_post'),
     path('post/edit/<int:pk>/', EditQuestion.as_view(), name='edit_post'),
     path('post/delete/<int:pk>/', DeleteQuestion.as_view(), name='delete_post'),
-    path('comments/<int:question_id>/', get_comments)
+    path('comments/<int:question_id>/', get_comments),
+
+    # crud comment
+    path('comment/create/', views.CreateComment.as_view(), name='create_post'),
 ]
 
 """ Concrete View Classes

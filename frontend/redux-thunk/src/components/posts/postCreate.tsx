@@ -67,7 +67,6 @@ export default function Create() {
 			.post(`post/create/`, {
 				title: formData.title.trim(),
                 slug: formData.slug.trim(),
-				author: 1,
 				excerpt: formData.excerpt.trim(),
 				content: formData.content.trim(),
 			})

@@ -27,7 +27,7 @@ function AuthorInfo(props:any) {
             <div className="AuthorInfo-image">
                 <a href=""><img src={initProps.img} alt="" /></a>
                 <div className="right">
-                    <a href=""><p>nguyen tien dung</p></a>
+                    <a href=""><p>{props.first_name} {props.last_name}</p></a>
                     <p>{initProps.numberUseFullComment}</p>
                 </div>
             </div>

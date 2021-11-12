@@ -88,6 +88,12 @@ class DeleteQuestion(generics.DestroyAPIView):
     serializer_class = QuestionSerializer
 
 
+class CreateComment(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
 def comment_instance_to_list(comment):
     comment_dict = {'id': comment.id, 'content': comment.content, 'created': str(comment.created),
                     'upvote': comment.upvote, 'downvote': comment.down_vote}
@@ -115,5 +121,33 @@ def get_comments(request, question_id=None):
     return Response({'data': comment_dicts})
 
 
+@api_view()
+@permission_classes([AllowAny])
+def get_question(request, question_id=None):
+    if not question_id:
+        Response({"code": 400, "message": "Bad Request"})
+    question = Question.objects.get(pk=question_id)
+    if not question:
+        Response({"code": 400, "message": "Bad Request"})
+    question_data = {'id': question_id, 'content': question.content, 'title': question.title,
+                     'numberComment': question.number_comment, 'comments': [],
+                     'upvote': question.upvote,
+                     'down_vote': question.down_vote,
+                     'last_update': question.last_update, 'created_at': question.created}
 
+    for comment in question.comment_set.all():
+        author = comment.author
+        question_data['comments'].append({
+            'content': comment.content,
+            'author': {'first_name': author.first_name,
+                       'last_name': author.last_name,
+                       'image': ''
+                       },
+            'confirmed': comment.confirmed,
+            'last_update': str(comment.last_update),
+            'created_at': str(comment.created),
+            'upvote': comment.upvote,
+            'downvote': comment.down_vote
+        })
+    return Response(question_data)
 

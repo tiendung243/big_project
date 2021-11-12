@@ -1,4 +1,5 @@
-import './Question.css';
+import React, { useState, useEffect } from 'react';
+import './Comment.css';
 import QuestionShare from '../atoms/sharingQuetion'; 
 import AuthorInfo from '../atoms/authorInfo';
 import VotePoint from '../atoms/votePoint';
@@ -14,33 +15,30 @@ function Comment(props:any) {
                 id: 1,
                 name: 'Cristian'
             }
-        },
-        {
-            content: 'I think it\'s worth adding to this answer what the effect of not quoting a variable with spaces would be.',
-            time: 'Apr 8 \'12 at 23:13',
-            author: {
-                id: 2,
-                name: 'Owen'
-            }
-        },
-        {
-            content: 'do you only have to quote string variables?',
-            time: 'Apr 8 \'12 at 23:13',
-            author: {
-                id: 1,
-                name: 'Cristian'
-            }
         }
-    ]
+    ];
+	const [postReply, setPostReply] = useState();
+    const data = props.data;
+
+	function handleSubmit(e:any) {
+		alert('A name was submitted: ');
+		e.preventDefault();
+	}
+
+	function handleOnChange(e:any){
+        console.log(e.target.value);
+		setPostReply(e.target.value);
+	}
+    console.log('author name', data.author.first_name);
     return (
         <div>
             <div className="QuestionContent">
-                <VotePoint />
-                <CommentContent />
+                <VotePoint number_vote={data.upvote - data.downvote}/>
+                <CommentContent content={data.content}/>
             </div>
             <div className="QuestionTop">
                 <QuestionShare />
-                <AuthorInfo />
+                <AuthorInfo {...data.author}/>
             </div>
             <div className="ListChildComments">
                 {
@@ -49,6 +47,14 @@ function Comment(props:any) {
                     )
                 }
             </div>
+            <div className="ReplyCreate">
+                <p>Create a reply</p>
+                <form onSubmit={(e) => handleSubmit(e)} className="form_reply">
+					<input className="post_reply" name="postComment" value={postReply} onChange={handleOnChange} />
+					<input type="submit" value="Submit" />
+				</form>
+            </div>
+            <br/>
         </div>
     )
 }

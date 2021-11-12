@@ -43,3 +43,12 @@
     display: flex;
     margin-left: 45px;
 }
+
+.form_comment {
+    width: 100% !important;
+}
+
+.form_comment .post_comment {
+    width: 100%;
+    height: 100px;
+}
