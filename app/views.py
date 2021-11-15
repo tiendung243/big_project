@@ -95,30 +95,29 @@ class CreateComment(generics.CreateAPIView):
 
 
 def comment_instance_to_list(comment):
-    comment_dict = {'id': comment.id, 'content': comment.content, 'created': str(comment.created),
-                    'upvote': comment.upvote, 'downvote': comment.down_vote}
+    comment_dict = {'content': comment.content, 'created': str(comment.created)}
     author = comment.author
-    comment_dict['author'] = [author.id, author.first_name, str(author.image)]
+    comment_dict['author'] = [author.id, author.first_name, str(author.image), author.last_name]
     return comment_dict
 
 
-@api_view()
-@permission_classes([AllowAny])
-def get_comments(request, question_id=None):
-    comments = Comment.objects.filter(question=question_id, parent_comment=None).prefetch_related('comment_set')
-    comment_dicts = []
-    for comment in comments:
-        comment_dict = comment_instance_to_list(comment)
-        child_comments = comment.comment_set.all()
-        list_child_comments = []
-        for child_comment in child_comments:
-            list_child_comment = comment_instance_to_list(child_comment)
-            list_child_comments.append(list_child_comment)
-
-        comment_dict['comment_set'] = list_child_comments
-        comment_dicts.append(comment_dict)
-
-    return Response({'data': comment_dicts})
+# @api_view()
+# @permission_classes([AllowAny])
+# def get_comments(request, question_id=None):
+#     comments = Comment.objects.filter(question=question_id, parent_comment=None).prefetch_related('comment_set')
+#     comment_dicts = []
+#     for comment in comments:
+#         comment_dict = comment_instance_to_list(comment)
+#         child_comments = comment.comment_set.all()
+#         list_child_comments = []
+#         for child_comment in child_comments:
+#             list_child_comment = comment_instance_to_list(child_comment)
+#             list_child_comments.append(list_child_comment)
+#
+#         comment_dict['comment_set'] = list_child_comments
+#         comment_dicts.append(comment_dict)
+#
+#     return Response({'data': comment_dicts})
 
 
 @api_view()
@@ -137,7 +136,8 @@ def get_question(request, question_id=None):
 
     for comment in question.comment_set.all():
         author = comment.author
-        question_data['comments'].append({
+        current_comment = {
+            'id': comment.id,
             'content': comment.content,
             'author': {'first_name': author.first_name,
                        'last_name': author.last_name,
@@ -148,6 +148,12 @@ def get_question(request, question_id=None):
             'created_at': str(comment.created),
             'upvote': comment.upvote,
             'downvote': comment.down_vote
-        })
+        }
+        list_child_comments = []
+        for child_comment in comment.comment_set.all():
+            list_child_comment = comment_instance_to_list(child_comment)
+            list_child_comments.append(list_child_comment)
+        current_comment['child_comments'] = list_child_comments
+        question_data['comments'].append(current_comment)
     return Response(question_data)
 

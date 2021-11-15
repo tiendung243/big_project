@@ -8,6 +8,9 @@ import ButtonAddQuestion from '../atoms/addQuestion';
 import QuestionTop from '../molecules/Question';
 import Comment from '../molecules/Comment';
 
+import {useSelector} from 'react-redux';
+import {State} from '../../reducers/index';
+
 export default function Post() {
 	const { id } : {id : string} = useParams();
 	const history = useHistory();
@@ -15,17 +18,20 @@ export default function Post() {
 	interface IAuthor {
 		first_name: string,
 		last_name: string,
-		image: string
+		image: string,
+		username: string
 	}
 
 	interface IComment {
+		id: number,
 		content: string,
 		author: IAuthor,
 		confirmed: boolean,
 		last_update: string,
 		created_at: string,
 		upvote: number,
-		down_vote: number
+		down_vote: number,
+		child_comments: any
 	}
 
     interface Ipost {
@@ -43,17 +49,25 @@ export default function Post() {
 		title: '', content: '', numberComment:0, created_at:'', last_update: '', comments: [], upvote: 0, down_vote: 0
 	});
 
+	const userInfo = useSelector((state:State) => state.user);
+
 	const [postComment, setPostComment] = useState();
 	// const [comments, setComments] = useState();
 
 	function handleSubmit(e:any) {
 		e.preventDefault();
-		console.log(postComment, id);
 		axiosInstance.post(`comment/create/`, {
 			question: id,
 			content: postComment,
 		}).then((res) => {
-			history.push('/');
+			const new_comment = res.data;
+			const comments = [...data.comments, {
+				...new_comment,
+				author: userInfo,
+				child_comments: []
+			}];
+
+			setData({...data, comments: comments});
 		});
 	}
 
@@ -69,12 +83,6 @@ export default function Post() {
 		});
 	}, [setData]);
 
-	// useEffect(() => {
-	// 	axiosInstance.get('comments/' + id).then((res) => {
-	// 		console.log(res.data);
-	// 	});
-	// }, [setComments]);
-	console.log('data', data.comments);
 	return (
 		<Container component="main" maxWidth="md">
 			<div className="PostDetail">

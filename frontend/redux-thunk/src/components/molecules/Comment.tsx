@@ -1,35 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import './Comment.css';
+import axiosInstance from '../../axios';
 import QuestionShare from '../atoms/sharingQuetion'; 
 import AuthorInfo from '../atoms/authorInfo';
 import VotePoint from '../atoms/votePoint';
 import CommentContent from '../atoms/commentContent';
 import ChildComment from './ChildComment';
+import {useSelector} from 'react-redux';
+import {State} from '../../reducers/index';
 
 function Comment(props:any) {
-    const childComments = [
-        {
-            content: 'so you would alternate asdasd asdasd asdasd  asdasd sadso you would alternate asdasd asdasd asdasd  asdasd sadso you would alternate asdasd asdasd asdasd  asdasd sadasdbetween quoting and non-quoting variables in your scripts? thanks for your response',
-            time: 'Apr 8 \'12 at 23:10',
-            author: {
-                id: 1,
-                name: 'Cristian'
-            }
-        }
-    ];
 	const [postReply, setPostReply] = useState();
+    console.log(props.data);
+    const [childComments, setChildComment] = useState(props.data.child_comments);
     const data = props.data;
+    const userInfo = useSelector((state:State) => state.user);
 
 	function handleSubmit(e:any) {
-		alert('A name was submitted: ');
 		e.preventDefault();
+        axiosInstance.post(`comment/create/`, {
+            parent_comment: data.id,
+			content: postReply,
+		}).then((res) => {
+            console.log('current data', childComments);
+			const new_comment = res.data;
+            console.log('new comment', new_comment);
+            console.log(userInfo);
+			setChildComment([...childComments, {
+                content: new_comment.content, 
+                created: new_comment.created_at,
+                author:[userInfo.id, userInfo.first_name, userInfo.image, userInfo.last_name]
+            }]);
+		});
 	}
 
 	function handleOnChange(e:any){
-        console.log(e.target.value);
 		setPostReply(e.target.value);
 	}
-    console.log('author name', data.author.first_name);
     return (
         <div>
             <div className="QuestionContent">
@@ -42,9 +49,9 @@ function Comment(props:any) {
             </div>
             <div className="ListChildComments">
                 {
-                    childComments.map((childComment) => 
+                    childComments.length ? childComments.map((childComment:any) => 
                         <ChildComment content={childComment.content} time={childComment.time} author={childComment.author}/>
-                    )
+                    ) : ''
                 }
             </div>
             <div className="ReplyCreate">

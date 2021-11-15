@@ -1,21 +1,15 @@
 import './ChildComment.css';
 
-
-interface IAuthor {
-    id: number,
-    name: string
-}
-
 interface IChildComment {
     content: string,
     time: string,
-    author: IAuthor
+    author: any
 }
 
 export default function ChildComment (props:IChildComment){
     return (
         <div className="ChildComment">
-            <p>{props.content}</p> - <a href="">{props.author.name} </a> 
+            <p>{props.content}</p> - <a href="">{props.author[1]} </a> 
             <p>{props.time}</p>
         </div>
     )
