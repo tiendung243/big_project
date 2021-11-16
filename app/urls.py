@@ -13,10 +13,13 @@ urlpatterns = [
     path('post/create/', CreateQuestion.as_view(), name='create_post'),
     path('post/edit/<int:pk>/', EditQuestion.as_view(), name='edit_post'),
     path('post/delete/<int:pk>/', DeleteQuestion.as_view(), name='delete_post'),
+    path('post/vote/<int:question_id>', views.vote_post, name='vote_post'),
     # path('comments/<int:question_id>/', get_comments),
 
     # crud comment
     path('comment/create/', views.CreateComment.as_view(), name='create_post'),
+    path('comment/vote/<int:question_id>', views.vote_comment, name='vote_comment'),
+
 ]
 
 """ Concrete View Classes

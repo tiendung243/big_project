@@ -132,6 +132,7 @@ def get_question(request, question_id=None):
                      'numberComment': question.number_comment, 'comments': [],
                      'upvote': question.upvote,
                      'down_vote': question.down_vote,
+                     'tags': list(question.tags.all().values_list('name', flat=True)),
                      'last_update': question.last_update, 'created_at': question.created}
 
     for comment in question.comment_set.all():
@@ -156,4 +157,19 @@ def get_question(request, question_id=None):
         current_comment['child_comments'] = list_child_comments
         question_data['comments'].append(current_comment)
     return Response(question_data)
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def vote_post(request, post_id=None):
+    user = request.user
+    question = Question.objects.filter(pk=post_id)
+
+    pass
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def vote_comment(request, comment_id=None):
+    pass
 

@@ -11,6 +11,8 @@ import Comment from '../molecules/Comment';
 import {useSelector} from 'react-redux';
 import {State} from '../../reducers/index';
 
+export const TagContext = React.createContext({tags: [''], question_id: 0, update_vote: (type:string) => {}});
+
 export default function Post() {
 	const { id } : {id : string} = useParams();
 	const history = useHistory();
@@ -42,14 +44,30 @@ export default function Post() {
 		last_update: string,
 		comments: IComment[],
 		upvote: number,
-		down_vote: number
+		down_vote: number,
+		tags: string[]
     };
 
 	const [data, setData] = useState<Ipost>({
-		title: '', content: '', numberComment:0, created_at:'', last_update: '', comments: [], upvote: 0, down_vote: 0
+		title: '', content: '', numberComment:0, created_at:'', last_update: '', comments: [], upvote: 0, down_vote: 0, tags: []
 	});
 
 	const userInfo = useSelector((state:State) => state.user);
+
+	const updateVote = (type: string) => {
+		console.log("12312312");
+		if (type === 'upvote'){
+			setData({
+				...data,
+				upvote: data.upvote + 1
+			})
+		}else{
+			setData({
+				...data,
+				down_vote: data.down_vote + 1
+			})
+		}
+	}
 
 	const [postComment, setPostComment] = useState();
 	// const [comments, setComments] = useState();
@@ -71,7 +89,7 @@ export default function Post() {
 		});
 	}
 
-	function handleOnChange(e:any){
+	function handleOnChange(e:any) {
 		console.log(e.target.value);
 		setPostComment(e.target.value);
 	}
@@ -98,7 +116,9 @@ export default function Post() {
 						<ButtonAddQuestion />
 					</div>
 				</div>
-				<QuestionTop number_vote={data.upvote - data.down_vote}/>
+				<TagContext.Provider value={{tags: data.tags, question_id: +id, update_vote: updateVote}}>
+					<QuestionTop number_vote={data.upvote - data.down_vote}/>
+				</TagContext.Provider>
 				<h2> {data.numberComment} Answers</h2>
 				{data.comments.map(comment => 
 					<Comment questionId={id} data={comment}/>
