@@ -11,7 +11,6 @@ class Category(models.Model):
 
 
 class Question(models.Model):
-
     class QuestionObject(models.Manager):
         def get_queryset(self):
             return super().get_queryset().filter(status='published')
@@ -36,7 +35,6 @@ class Question(models.Model):
     last_update = models.DateTimeField(default=timezone.now)
     number_bookmarked = models.IntegerField(default=0)
     number_comment = models.IntegerField(default=0)
-    voted_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='voted_posts', blank=True, null=True)
 
     objects = models.Manager()
     questionObjects = QuestionObject()
@@ -63,7 +61,30 @@ class Comment(models.Model):
     parent_comment = models.ForeignKey('Comment', on_delete=models.CASCADE, blank=True, null=True)
     confirmed = models.BooleanField(default=False)
     last_update = models.DateTimeField(default=timezone.now)
-    voted_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='voted_comments', blank=True, null=True)
+
+
+class VoteQuestion(models.Model):
+    options = (
+        ('upvote', 'Upvote'),
+        ('down_vote', 'Down Vote')
+    )
+
+    question = models.ForeignKey(Question, related_name='votes', blank=True, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='vote_questions', blank=True, null=True,
+                             on_delete=models.CASCADE)
+    type = models.CharField(max_length=20, choices=options, default='upvote')
+
+
+class VoteComment(models.Model):
+    options = (
+        ('upvote', 'Upvote'),
+        ('down_vote', 'Down Vote')
+    )
+
+    comment = models.ForeignKey(Comment, related_name='votes', blank=True, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='vote_comments', blank=True, null=True,
+                             on_delete=models.CASCADE)
+    type = models.CharField(max_length=20, choices=options, default='upvote')
 
 
 class Tag(models.Model):
@@ -74,5 +95,3 @@ class Tag(models.Model):
     name = models.CharField(unique=True, max_length=255)
     number_posts = models.IntegerField(default=0)
     questions = models.ManyToManyField(Question, related_name='tags', blank=True, null=True)
-
-

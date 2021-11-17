@@ -11,7 +11,7 @@ import Comment from '../molecules/Comment';
 import {useSelector} from 'react-redux';
 import {State} from '../../reducers/index';
 
-export const TagContext = React.createContext({tags: [''], question_id: 0, update_vote: (type:string) => {}});
+export const TagContext = React.createContext({tags: [''], question_id: 0, update_vote: (upvote:number, down_vote:number) => {}});
 
 export default function Post() {
 	const { id } : {id : string} = useParams();
@@ -54,19 +54,12 @@ export default function Post() {
 
 	const userInfo = useSelector((state:State) => state.user);
 
-	const updateVote = (type: string) => {
-		console.log("12312312");
-		if (type === 'upvote'){
-			setData({
-				...data,
-				upvote: data.upvote + 1
-			})
-		}else{
-			setData({
-				...data,
-				down_vote: data.down_vote + 1
-			})
-		}
+	const updateVote = (upvote:number, down_vote:number) => {
+		setData({
+			...data,
+			upvote: upvote,
+			down_vote: down_vote
+		})
 	}
 
 	const [postComment, setPostComment] = useState();
@@ -117,7 +110,7 @@ export default function Post() {
 					</div>
 				</div>
 				<TagContext.Provider value={{tags: data.tags, question_id: +id, update_vote: updateVote}}>
-					<QuestionTop number_vote={data.upvote - data.down_vote}/>
+					<QuestionTop upvote={data.upvote} down_vote={data.down_vote}/>
 				</TagContext.Provider>
 				<h2> {data.numberComment} Answers</h2>
 				{data.comments.map(comment => 

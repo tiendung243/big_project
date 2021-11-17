@@ -26,8 +26,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="7a41ae28-ff36-4dd2-a41d-871af1a8feb4">
-        <schema name="itlearn" object-types="table, view, procedure, function" />
-        <schema name="itlearn4" object-types="table, view, procedure, function" />
+        <schema name="itlearn4" object-types="table, view, procedure, function, constraint, index, column, dataset trigger" />
       </connection>
     </loaded-nodes>
   </component>

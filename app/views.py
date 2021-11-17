@@ -159,17 +159,62 @@ def get_question(request, question_id=None):
     return Response(question_data)
 
 
-@api_view()
-@permission_classes([IsAuthenticated])
-def vote_post(request, post_id=None):
+def vote(request, type_model):
+    model = Question.objects
+    model_vote = VoteQuestion.objects
+    if type_model == 'comment':
+        model = Comment.objects
+        model_vote = VoteComment.objects
+
     user = request.user
-    question = Question.objects.filter(pk=post_id)
+    type = request.data.get('type')
+    obj_id = request.data.get('obj_id')
+    obj = model.get(pk=obj_id)
+    if not user or not obj:
+        return {"code": 400, "message": "Bad Request"}
+    if type_model == 'comment':
+        voted = model_vote.filter(user=user, comment=obj)
+    else:
+        voted = model_vote.filter(user=user, question=obj)
+    if not voted:
+        if type_model == 'comment':
+            model_vote.create(comment=obj, user=user)
+        else:
+            model_vote.create(question=obj, user=user)
+        if type == 'upvote':
+            obj.upvote += 1
+        else:
+            obj.down_vote += 1
+        obj.save()
+        return {'code': 200, 'message': 'success', 'upvote': obj.upvote, 'down_vote': obj.down_vote}
+    voted = voted[0]
+    if type == voted.type:
+        return {'code': 200, 'message': 'success', 'upvote': obj.upvote, 'down_vote': obj.down_vote}
+    if type == 'upvote':
+        voted.type = 'upvote'
+        obj.upvote += 1
+        obj.down_vote -= 1
+        obj.save()
+    else:
+        voted.type = 'down_vote'
+        obj.upvote -= 1
+        obj.down_vote += 1
+        obj.save()
+    voted.save()
+    return {'code': 200, 'message': 'success', 'upvote': obj.upvote, 'down_vote': obj.down_vote}
 
-    pass
 
-
-@api_view()
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def vote_comment(request, comment_id=None):
-    pass
+def vote_post(request):
+    result = vote(request, 'question')
+    return Response(result)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def vote_comment(request):
+    result = vote(request, 'comment')
+    return Response(result)
+
 

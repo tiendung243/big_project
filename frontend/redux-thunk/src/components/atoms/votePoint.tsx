@@ -3,28 +3,54 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import axiosInstance from '../../axios';
 
-import { useContext } from 'react';
-import {TagContext} from '../posts/postDetail';
+import { useContext, useState } from 'react';
+import { TagContext } from '../posts/postDetail';
 
 function VotePoint(props:any) {
     
-    const {question_id, update_vote} = useContext(TagContext);
+    const {question_id} = useContext(TagContext);
 
-    function upvote(e:any){
+    const [upvote, setUpvote] = useState(props.upvote);
+    const [down_vote, setDownvote] = useState(props.down_vote);
+
+    function sendVote(type_vote:string, obj_id:number, path:string) {
+        axiosInstance.post(path, {
+            type: type_vote,
+            obj_id: obj_id
+        }).then((res) => {
+            console.log(res.data);
+            setUpvote(res.data.upvote);
+            setDownvote(res.data.down_vote);
+        })
+    }
+
+    function upvote_func(e:any) {
         console.log("click upvote");
-        update_vote('upvote');
-        
+        const type = props.type;
+        if (type === 'question') {
+            sendVote('upvote', question_id, 'post/vote');
+        } else {
+            const comment_id = props.comment_id;
+            sendVote('upvote', comment_id, 'comment/vote');
+        }
     }
     
-    function downvote(e:any){
+    function downvote_func(e:any) {
         console.log("click downvote");
+        const type = props.type;
+        if (type === 'question'){
+            sendVote('down_vote', question_id, 'post/vote');
+        } else {
+            const comment_id = props.comment_id;
+            sendVote('down_vote', comment_id, 'comment/vote');
+        }
     }
 
     return (
         <div className="VotePoint">
-            <ArrowDropUpIcon onClick={upvote}/>
-            {props.number_vote}
-            <ArrowDropDownIcon onClick={downvote}/>
+            <ArrowDropUpIcon onClick={upvote_func}/>
+                {upvote - down_vote}
+            <ArrowDropDownIcon onClick={downvote_func}/>
         </div>
     )
 }

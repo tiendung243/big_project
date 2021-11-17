@@ -11,7 +11,6 @@ import {State} from '../../reducers/index';
 
 function Comment(props:any) {
 	const [postReply, setPostReply] = useState();
-    console.log(props.data);
     const [childComments, setChildComment] = useState(props.data.child_comments);
     const data = props.data;
     const userInfo = useSelector((state:State) => state.user);
@@ -29,18 +28,19 @@ function Comment(props:any) {
 			setChildComment([...childComments, {
                 content: new_comment.content, 
                 created: new_comment.created_at,
-                author:[userInfo.id, userInfo.first_name, userInfo.image, userInfo.last_name]
+                author: [userInfo.id, userInfo.first_name, userInfo.image, userInfo.last_name]
             }]);
 		});
 	}
 
-	function handleOnChange(e:any){
+	function handleOnChange(e:any) {
 		setPostReply(e.target.value);
 	}
+
     return (
         <div>
             <div className="QuestionContent">
-                <VotePoint number_vote={data.upvote - data.downvote}/>
+                <VotePoint upvote={data.upvote} down_vote={data.downvote} type='comment' comment_id={data.id}/>
                 <CommentContent content={data.content}/>
             </div>
             <div className="QuestionTop">

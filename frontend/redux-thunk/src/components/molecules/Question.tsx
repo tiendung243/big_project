@@ -16,7 +16,7 @@ function QuestionTop(props:any) {
     return (
         <div>
             <div className="QuestionContent">
-                <VotePoint number_vote={props.number_vote}/>
+                <VotePoint upvote={props.upvote} down_vote={props.down_vote} type='question'/>
                 <CommentContent />
             </div>
             <div className="TagContainer">
