@@ -1,0 +1,41 @@
+.Question_Row {
+    height: 85px !important;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+
+.Question_Row-content {
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+}
+
+.Question_Row-content .title{
+    font-size: 17px;
+    color: rgb(60, 60, 255);
+    margin: 0 0 0 5px;
+    cursor: pointer;
+}
+
+.Question_Row-content .tag-time{
+    display: flex;
+}
+
+.Question_Row-content .tag-time .left{
+    width: 70%;
+    min-width: 350px;
+    display: flex;
+    margin-right: auto;
+}
+
+.Question_Row-content .content-right {
+    font-size: 13px;
+    color: gray;
+    height: 30px;
+    margin-top: 20px;
+}
+
+.Question_Row-content .content-right p{
+    margin: 0 !important;
+}
+

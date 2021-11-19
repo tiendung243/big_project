@@ -6,7 +6,7 @@ from . import views
 app_name = 'app'
 
 urlpatterns = [
-    path('', QuestionList.as_view(), name='list_latest_post'),
+    path('', views.get_top_list_question, name='list_latest_post'),
     path('search/', QuestionListDetailFilter.as_view(), name='post_search'),
     #     crud question
     path('post/<int:question_id>/', views.get_question),

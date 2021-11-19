@@ -1,6 +1,7 @@
 import React,{ useEffect, useState } from 'react';
 import './App.css';
 import PostLoading from './components/posts/postloading';
+import ListQuestionTop from './components/atoms/listQuestionTop';
 import axiosInstance from './axios';
 
 import Register from './components/auth/register';
@@ -25,14 +26,14 @@ function Posts () {
 
 	useEffect(() => {
 		axiosInstance.get('').then((res) => {
-			const allPosts = res.data;
+			const allPosts = res.data.questions;
 			setAppState({ loading: false, posts: allPosts });
-			console.log(res.data);
+			console.log('posts data', res.data.questions);
 		});
 	}, [setAppState]);
 	return (
 		<div className="App">
-			<h1>Latest Posts</h1>
+			<ListQuestionTop />
 			<PostLoading isLoading={appState.loading} posts={appState.posts} />
 		</div>
 	);

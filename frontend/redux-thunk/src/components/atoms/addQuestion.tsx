@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 
 function ButtonAddQuestion(props:any) {
     return (
-        <Button
+        <Button className='btn-add-question'
             href={'/post/create'}
             variant="contained"
             color="primary"

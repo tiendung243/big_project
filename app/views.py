@@ -34,6 +34,28 @@ class QuestionList(generics.ListAPIView):
     #     return Question.objects.filter(author=user)
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_top_list_question(request):
+    question_list = Question.objects.filter(status='published').order_by('-created')[:25]
+    if not question_list:
+        return Response({"code": 400, "message": "Bad Request"})
+    result = []
+    for question in question_list:
+        author = question.author
+        result.append({
+            'id': question.id,
+            'comment': question.number_comment,
+            'view': question.view,
+            'vote': question.upvote - question.down_vote,
+            'title': question.title,
+            'created': str(question.created),
+            'author': {'id': author.id, 'first_name': author.first_name},
+            'tags': [tag.name for tag in question.tags.all()]
+        })
+    return Response({'code': 200, 'questions': result})
+
+
 # chi tiet question filter bang slug ->retrieve view api
 class QuestionDetail(generics.RetrieveAPIView):
     serializer_class = QuestionSerializer

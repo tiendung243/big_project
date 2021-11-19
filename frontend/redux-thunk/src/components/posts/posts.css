@@ -1,0 +1,4 @@
+.ListQuestionPage .MuiTableContainer-root {
+    overflow-y: hidden;
+    height: auto !important;
+}

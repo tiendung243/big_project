@@ -1,6 +1,7 @@
 import React from 'react';
 import axiosInstance from '../../axios';
 import { useHistory } from 'react-router-dom';
+import './posts.css';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -16,6 +17,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Button from '@material-ui/core/Button';
 import ButtonAddQuestion from '../atoms/addQuestion'
+
+import QuestionRow from '../molecules/QuestionRow';
 
 const useStyles = makeStyles((theme) => ({
 	cardMedia: {
@@ -49,11 +52,20 @@ const Posts = (props:any) => {
 	console.log(posts);
 	const history = useHistory();
 	const classes = useStyles();
+
+	interface IAuthor {
+		id: number,
+		first_name: string
+	}
 	interface IPost {
 		id: number,
-		slug: string,
 		title: string,
-		category: string,
+		comment: number,
+		view: number,
+		vote: number,
+		created: string,
+		author: IAuthor,
+		tags: string[]
 	}
 
 	function handleDelete(e:any, id:number){
@@ -78,62 +90,18 @@ const Posts = (props:any) => {
 	if (!posts || posts.length === 0) return <p>Can not find any posts, sorry</p>;
 	return (
 		<React.Fragment>
-			<Container maxWidth="md" component="main">
+			<Container maxWidth="md" component="main" className="ListQuestionPage">
 				<Paper>
 					<TableContainer>
 						<Table stickyHeader aria-label="sticky table">
-							<TableHead>
-								<TableRow>
-									<TableCell>Id</TableCell>
-									<TableCell align="left">Category</TableCell>
-									<TableCell align="left">Title</TableCell>
-									<TableCell align="left">Action</TableCell>
-								</TableRow>
-							</TableHead>
 							<TableBody>
 								{posts.map((post:IPost) => {
 									return (
 										<TableRow>
-											<TableCell component="th" scope="row">
-												{post.id}
-											</TableCell>
-											<TableCell align="left">{post.category}</TableCell>
-
-											<TableCell align="left">
-												<Link
-													color="textPrimary"
-													href={'/post/' + post.id}
-													className={classes.link}
-												>
-													{post.title}
-												</Link>
-											</TableCell>
-
-											<TableCell align="left">
-												<Link
-													color="textPrimary"
-													href={'/post/edit/' + post.id}
-													className={classes.link}
-												>
-													<EditIcon></EditIcon>
-												</Link>
-												<Link
-													color="textPrimary"
-													href={'/post/delete/' + post.id}
-													className={classes.link}
-													onClick={(e)=>{handleDelete(e,post.id)}}
-												>
-													<DeleteForeverIcon></DeleteForeverIcon>
-												</Link>
-											</TableCell>
+											<QuestionRow post={post}/>
 										</TableRow>
 									);
 								})}
-								<TableRow>
-									<TableCell colSpan={4} align="right">
-										<ButtonAddQuestion />
-									</TableCell>
-								</TableRow>
 							</TableBody>
 						</Table>
 					</TableContainer>

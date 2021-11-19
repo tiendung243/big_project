@@ -1,0 +1,19 @@
+.Question_Row {
+    display: flex;
+}
+
+.Question_Stat {
+    width: 80px;
+    color: gray;
+}
+
+
+.Question_Stat p {
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.Question_Stat h3 {
+    margin-bottom: 0px;
+}
+
