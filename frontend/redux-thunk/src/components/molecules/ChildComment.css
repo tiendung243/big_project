@@ -4,7 +4,8 @@
 
 .ChildComment{
     min-height: 40px;
-    border-top: 1px solid #dfd9d9;
+    border-top: 1px solid #f0eeee;
     margin-bottom: 5px;
     padding-top: 5px;
+    padding-left: 20px;
 }

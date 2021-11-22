@@ -10,21 +10,20 @@ import {TagContext} from '../posts/postDetail';
 
 function QuestionTop(props:any) {
 
-    const {tags} = useContext(TagContext);
-    console.log('tags', tags);
+    const { tags, author, created } = useContext(TagContext);
 
     return (
         <div>
             <div className="QuestionContent">
                 <VotePoint upvote={props.upvote} down_vote={props.down_vote} type='question'/>
-                <CommentContent />
+                <CommentContent content={props.content}/>
             </div>
             <div className="TagContainer">
                 {tags.map((tag) => <QuestionTag name={tag} />)}
             </div>
             <div className="QuestionTop">
                 <QuestionShare />
-                <AuthorInfo />
+                <AuthorInfo isAsk={true} created={created} author={author}/>
             </div>
         </div>
     )

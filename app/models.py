@@ -2,6 +2,9 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -23,7 +26,7 @@ class Question(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
     title = models.CharField(max_length=250)
     excerpt = models.TextField(null=True)
-    content = models.TextField()
+    content = RichTextUploadingField()
     slug = models.SlugField(max_length=250, unique_for_date='created')
     created = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
@@ -53,7 +56,7 @@ class Comment(models.Model):
         return self.content
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE, blank=True, null=True)
-    content = models.TextField()
+    content = RichTextUploadingField()
     created = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
     upvote = models.IntegerField(default=0)

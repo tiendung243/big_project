@@ -10,8 +10,12 @@ import Comment from '../molecules/Comment';
 
 import {useSelector} from 'react-redux';
 import {State} from '../../reducers/index';
+import {CKEditor} from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import Cookies from 'js-cookie';
+import {handleDateTimeCreated} from '../../common';
 
-export const TagContext = React.createContext({tags: [''], question_id: 0, update_vote: (upvote:number, down_vote:number) => {}});
+export const TagContext = React.createContext({ author:{}, created:'', tags: [''], question_id: 0, update_vote: (upvote:number, down_vote:number) => {}});
 
 export default function Post() {
 	const { id } : {id : string} = useParams();
@@ -21,7 +25,8 @@ export default function Post() {
 		first_name: string,
 		last_name: string,
 		image: string,
-		username: string
+		username: string,
+		use_full_comment: number
 	}
 
 	interface IComment {
@@ -39,17 +44,20 @@ export default function Post() {
     interface Ipost {
 		title: string,
 		content: string,
+		view: number,
 		numberComment: number,
 		created_at: string,
 		last_update: string,
 		comments: IComment[],
 		upvote: number,
 		down_vote: number,
-		tags: string[]
+		tags: string[],
+		author: IAuthor
     };
 
 	const [data, setData] = useState<Ipost>({
-		title: '', content: '', numberComment:0, created_at:'', last_update: '', comments: [], upvote: 0, down_vote: 0, tags: []
+		title: '', content: '', numberComment:0, created_at:'', last_update: '', comments: [], upvote: 0, view: 0 ,down_vote: 0, tags: [],
+		author: {first_name: '', last_name: '', image: '', username: '', use_full_comment:0}
 	});
 
 	const userInfo = useSelector((state:State) => state.user);
@@ -81,16 +89,18 @@ export default function Post() {
 			setData({...data, comments: comments});
 		});
 	}
+	const handleDateTime = handleDateTimeCreated(data.created_at);
 
-	function handleOnChange(e:any) {
-		console.log(e.target.value);
-		setPostComment(e.target.value);
-	}
+	const csrfCookie = Cookies.get('csrftoken');
+	
+	// function handleOnChange(e:any) {
+	// 	setPostComment(e.target.value);
+	// }
 
 	useEffect(() => {
 		axiosInstance.get('post/' + id).then((res) => {
 			setData(res.data);
-			console.log(res.data);
+			console.log('post data',res.data);
 		});
 	}, [setData]);
 
@@ -99,25 +109,42 @@ export default function Post() {
 			<div className="PostDetail">
 				<div className="PostDetail-header">
 					<div className="header-left">
-						<p className='header-title'>{data.title}</p>
+						<p className='header-title' >{data.title}</p>
 						<div className="question-info">
-							<p> Asked 7 years, 6 months ago</p>
-							<p>Viewed 58k times</p>
+							<p> Asked {handleDateTime}</p>
+							<p>Viewed {data.view} times</p>
 						</div>
 					</div>
 					<div className="header-right">
 						<ButtonAddQuestion />
 					</div>
 				</div>
-				<TagContext.Provider value={{tags: data.tags, question_id: +id, update_vote: updateVote}}>
-					<QuestionTop upvote={data.upvote} down_vote={data.down_vote}/>
+				<TagContext.Provider value={{ author:data.author, created:handleDateTime, tags: data.tags, question_id: + id, update_vote: updateVote}}>
+					<QuestionTop upvote={data.upvote} down_vote={data.down_vote} content={data.content}/>
 				</TagContext.Provider>
 				<h2> {data.numberComment} Answers</h2>
 				{data.comments.map(comment => 
 					<Comment questionId={id} data={comment}/>
 				)}
 				<form onSubmit={(e) => handleSubmit(e)} className="form_comment">
-					<textarea className="post_comment" name="postComment" value={postComment} onChange={handleOnChange} />
+					<h2> Write your comment </h2>
+					<CKEditor
+						editor={ClassicEditor}
+						name="postComment"
+						data=""
+					
+						onChange={(event: any, editor: any) => {
+							const data = editor.getData();
+							console.log(data);
+							setPostComment(data);
+						}}
+						onBlur={(event: any, editor: any) => {
+							console.log("Blur.", editor);
+						}}
+						onFocus={(event: any, editor: any) => {
+							console.log("Focus.", editor);
+						}}
+					/>
 					<input type="submit" value="Submit" />
 				</form>
 			</div>

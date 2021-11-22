@@ -150,9 +150,20 @@ def get_question(request, question_id=None):
     question = Question.objects.get(pk=question_id)
     if not question:
         Response({"code": 400, "message": "Bad Request"})
+    question.view += 1
+    question.save()
+    author_question = question.author
     question_data = {'id': question_id, 'content': question.content, 'title': question.title,
                      'numberComment': question.number_comment, 'comments': [],
                      'upvote': question.upvote,
+                     'view': question.view,
+                     'author': {
+                         'first_name': author_question.first_name,
+                         'last_name': author_question.last_name,
+                         'image': author_question.image.name,
+                         'username': author_question.user_name,
+                         'use_full_comment': author_question.use_full_comment
+                     },
                      'down_vote': question.down_vote,
                      'tags': list(question.tags.all().values_list('name', flat=True)),
                      'last_update': question.last_update, 'created_at': question.created}
@@ -164,7 +175,8 @@ def get_question(request, question_id=None):
             'content': comment.content,
             'author': {'first_name': author.first_name,
                        'last_name': author.last_name,
-                       'image': ''
+                       'image': author.image.name,
+                       'use_full_comment': author.use_full_comment
                        },
             'confirmed': comment.confirmed,
             'last_update': str(comment.last_update),

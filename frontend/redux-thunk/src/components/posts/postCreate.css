@@ -1,0 +1,47 @@
+.QuestionCreate {
+    width: 90%;
+    margin: auto;
+    border: 1px solid rgb(233, 233, 233);
+    padding: 10px;
+    margin-top: 30px;
+    border-radius: 5px;
+}
+
+.QuestionCreate h1 {
+    margin: 0;
+    padding-bottom: 15px;
+    font-size: 22px;
+    color: #363636;
+}
+
+.QuestionCreate form {
+    width: 100% !important;
+}
+
+.QuestionCreate form .MuiFormControl-root {
+    margin-bottom: 10px;
+}
+
+.ck-content {
+    min-height: 200px;
+    height: auto;
+}
+
+pre {
+    background: #e7e7e7;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+code {
+    padding: 2px;
+    background: lightgrey;
+    border-radius: 2px;
+    border: 1px solid #bdbdbd;
+}
+
+pre code {
+    border: none;
+    background: none;
+}
+

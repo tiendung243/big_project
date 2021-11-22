@@ -2,8 +2,7 @@ import './commentContent.css';
 
 function CommentContent(props:any) {
     return (
-        <div className="CommentContent">
-            <p>{props.content}</p>
+        <div className="CommentContent" dangerouslySetInnerHTML={{ __html: props.content }}>
         </div>
     )
 }

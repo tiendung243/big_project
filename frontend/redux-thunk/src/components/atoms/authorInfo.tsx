@@ -1,34 +1,17 @@
 import './authorInfo.css';
 
-// interface IauthorInfo {
-//     id: number,
-//     img: string,
-//     authorName: string,
-//     numberUseFullComment : number,
-//     isAsk : boolean,
-//     time: string
-// }
-
-const initProps = {
-    id: 1,
-    img: 'https://source.unsplash.com/random',
-    authorName: 'dungnt',
-    numberUseFullComment: 12,
-    isAsk: true,
-    time: 'Jan 22 \'17 at 17:25'
-}
-
 function AuthorInfo(props:any) {
+    console.log('author info', props);
     return (
         <div className="AuthorInfo">
             <div className="AuthorInfo-time">
-                {initProps.isAsk ? 'Asked ' : 'Answer '} {initProps.time}
+                {props.isAsk ? 'Asked ' : 'Answered '} {props.created}
             </div>
             <div className="AuthorInfo-image">
-                <a href=""><img src={initProps.img} alt="" /></a>
+                <a href=""><img src={props.author.image} alt="" /></a>
                 <div className="right">
-                    <a href=""><p>{props.first_name} {props.last_name}</p></a>
-                    <p>{initProps.numberUseFullComment}</p>
+                    <a href=""><p>{props.author.first_name} {props.author.last_name}</p></a>
+                    <p>{props.author.use_full_comment}</p>
                 </div>
             </div>
         </div>
