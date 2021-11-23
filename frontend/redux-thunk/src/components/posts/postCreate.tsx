@@ -14,13 +14,14 @@ import Cookies from 'js-cookie';
 
 export default function Create() {
 	const history = useHistory();
-	const initialFormData = Object.freeze({
+	const initialFormData = {
 		title: '',
         slug: '',
 		content: '',
 		tags: ''
-	});
+	};
     console.log("create");
+	const base_url = window.location.origin;
 
 	const [formData, updateFormData] = useState(initialFormData);
 
@@ -48,15 +49,16 @@ export default function Create() {
 				title: formData.title.trim(),
                 slug: formData.slug.trim(),
 				content: formData.content.trim(),
+				tags: formData.tags.trim(),
 			})
 			.then((res) => {
-				history.push('/');
+				const {question_id} = res.data;
+				history.push(`/post/${question_id}`);
 			});
 	};
 	const csrfCookie = Cookies.get('csrftoken');
 	console.log('csrfCookie', csrfCookie);
 
-	const base_url = window.location.origin;
 
 	return (
 		<Container component="main" maxWidth="md">
@@ -91,9 +93,9 @@ export default function Create() {
 						variant="outlined"
 						required
 						fullWidth
-						id="tag"
+						id="tags"
 						label="You can add related tags here"
-						name="tag"
+						name="tags"
 						onChange={handleChange}
 						className="question-tag"
 					/>

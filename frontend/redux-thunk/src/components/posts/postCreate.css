@@ -22,6 +22,10 @@
     margin-bottom: 10px;
 }
 
+.ck-editor {
+    margin-bottom: 20px !important;
+}
+
 .ck-content {
     min-height: 200px;
     height: auto;

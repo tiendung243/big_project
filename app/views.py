@@ -9,6 +9,7 @@ from rest_framework.decorators import action, api_view, permission_classes
 from django.shortcuts import get_object_or_404
 from .serializers import QuestionSerializer, CommentSerializer
 from rest_framework import filters
+from datetime import datetime
 
 
 class PostUserWritePermission(BasePermission):
@@ -92,10 +93,41 @@ class QuestionListDetailFilter(generics.ListAPIView):
 # def get_queryset(self):
 #     return Post.objects.all()
 
-class CreateQuestion(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
+# class CreateQuestion(generics.CreateAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Question.objects.all()
+#     serializer_class = QuestionSerializer
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def create_question(request):
+    data = request.data
+    title = data.get('title')
+    slug = data.get('slug')
+    content = data.get('content')
+    tags = data.get('tags')
+    user = request.user
+
+    if not title or not content:
+        return Response({"code": 400, "message": "Bad Request"})
+
+    has_question = Question.objects.filter(slug=slug).exists()
+    if has_question:
+        unique_str = datetime.now().strftime('%Y%m-%d%H-%M%S-')
+        slug += unique_str
+    new_question = Question.objects.create(slug=slug, content=content, title=title, author=user)
+    if tags:
+        list_tags = tags.split()
+        for tag in list_tags:
+            tag_record = Tag.objects.filter(name=tag)
+            if tag_record.exists():
+                new_question.tags.add(tag_record[0].pk)
+            else:
+                tag_record = Tag.objects.create(name=tag)
+                new_question.tags.add(tag_record.pk)
+
+    return Response({'code': 200, 'message': 'success', 'question_id': new_question.pk})
 
 
 class EditQuestion(generics.UpdateAPIView):
