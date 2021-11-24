@@ -20,14 +20,13 @@ function Comment(props:any) {
 
 	function handleSubmit(e:any) {
 		e.preventDefault();
-        if (!postReply.trim()){
+        if (!postReply.trim()) {
             return;
         }
         axiosInstance.post(`comment/create/`, {
             parent_comment: data.id,
 			content: postReply,
 		}).then((res) => {
-            console.log('current data', childComments);
 			const new_comment = res.data;
 			setChildComment([...childComments, {
                 content: new_comment.content,
@@ -50,7 +49,7 @@ function Comment(props:any) {
             </div>
             <div className="QuestionTop">
                 <QuestionShare />
-                <AuthorInfo author={data.author} isAsk={false} created={handleDateTimeCreated(data.created_at)}/>
+                <AuthorInfo author={data.author} isAsk={false} created={data.created_at ? handleDateTimeCreated(data.created_at): '1 minute '}/>
             </div>
             <div className="ListChildComments">
                 {

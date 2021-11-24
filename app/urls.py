@@ -1,6 +1,5 @@
 from django.urls import path, include
-from .views import QuestionList, QuestionDetail, QuestionListDetailFilter, EditQuestion, DeleteQuestion \
-    , get_question
+from .views import QuestionListDetailFilter, DeleteQuestion
 from . import views
 
 app_name = 'app'
@@ -11,7 +10,7 @@ urlpatterns = [
     #     crud question
     path('post/<int:question_id>/', views.get_question),
     path('post/create/', views.create_question, name='create_post'),
-    path('post/edit/<int:pk>/', EditQuestion.as_view(), name='edit_post'),
+    path('post/edit/<int:pk>/', views.edit_question, name='edit_post'),
     path('post/delete/<int:pk>/', DeleteQuestion.as_view(), name='delete_post'),
     path('post/vote', views.vote_post, name='vote_post'),
     # path('comments/<int:question_id>/', get_comments),

@@ -2,6 +2,7 @@ import './QuestionRow.css';
 
 import QuestionStat from '../atoms/QuestionStat';
 import QuestionTag from '../atoms/tag';
+import {handleDateTimeCreated} from '../../common';
 
 function QuestionRow(props:any) {
     const {post} = props;
@@ -23,7 +24,7 @@ function QuestionRow(props:any) {
                         }
                     </div>
                     <div className="content-right">
-                        <p>Asked 2 hours ago <a href="">{post.author.first_name}</a> 12</p>
+                        <p>Asked {handleDateTimeCreated(post.created)} <a href="">{post.author.first_name}</a> 12</p>
                     </div>
                 </div>
             </div>

@@ -82,6 +82,8 @@ export default function Post() {
 			const new_comment = res.data;
 			const comments = [...data.comments, {
 				...new_comment,
+				upvote: 0,
+				downvote: 0,
 				author: userInfo,
 				child_comments: []
 			}];

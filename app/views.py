@@ -100,7 +100,7 @@ class QuestionListDetailFilter(generics.ListAPIView):
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def create_question(request):
     data = request.data
     title = data.get('title')
@@ -122,18 +122,52 @@ def create_question(request):
         for tag in list_tags:
             tag_record = Tag.objects.filter(name=tag)
             if tag_record.exists():
+                tag_record.number_posts += 1
+                tag_record.save()
                 new_question.tags.add(tag_record[0].pk)
             else:
-                tag_record = Tag.objects.create(name=tag)
+                tag_record = Tag.objects.create(name=tag, number_posts=1)
                 new_question.tags.add(tag_record.pk)
 
     return Response({'code': 200, 'message': 'success', 'question_id': new_question.pk})
 
 
-class EditQuestion(generics.UpdateAPIView):
-    permission_classes = [PostUserWritePermission]
-    queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
+# has_object_permission
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def edit_question(request, pk):
+    data = request.data
+    title = data.get('title')
+    slug = data.get('slug')
+    content = data.get('content')
+    tags = data.get('tags')
+    question = Question.objects.get(pk=pk)
+    if not question:
+        return Response({"code": 400, "message": "Bad Request"})
+    old_tags = question.tags.all().values_list('name', flat=True)
+    new_tags = tags.split()
+    for tag in new_tags:
+        if tag not in old_tags:
+            tag_record = Tag.objects.filter(name=tag)
+            if tag_record.exists():
+                tag_record[0].number_posts += 1
+                tag_record[0].save()
+                question.tags.add(tag_record[0].pk)
+            else:
+                tag_record = Tag.objects.create(name=tag, number_posts=1)
+                question.tags.add(tag_record.pk)
+    for tag in old_tags:
+        if tag not in new_tags:
+            tag_record = Tag.objects.filter(name=tag)
+            if tag_record.exists():
+                tag_record[0].number_posts -= 1
+                tag_record[0].save()
+                question.tags.remove(tag_record[0].pk)
+    question.content = content
+    question.slug = slug
+    question.title = title
+    question.save()
+    return Response({'code': 200, 'message': 'success'})
 
 
 class DeleteQuestion(generics.DestroyAPIView):
@@ -174,7 +208,7 @@ def comment_instance_to_list(comment):
 #     return Response({'data': comment_dicts})
 
 
-@api_view()
+@api_view(['GET'])
 @permission_classes([AllowAny])
 def get_question(request, question_id=None):
     if not question_id:
@@ -198,7 +232,9 @@ def get_question(request, question_id=None):
                      },
                      'down_vote': question.down_vote,
                      'tags': list(question.tags.all().values_list('name', flat=True)),
-                     'last_update': question.last_update, 'created_at': question.created}
+                     'last_update': question.last_update, 'created_at': question.created,
+                     'slug': question.slug
+                     }
 
     for comment in question.comment_set.all():
         author = comment.author

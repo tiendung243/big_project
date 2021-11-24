@@ -1,5 +1,5 @@
 .AuthorInfo {
-    width: 200px;
+    width: auto;
     background: #b8b8f3;
     border-radius: 2px;
 }
@@ -11,6 +11,8 @@
 
 .AuthorInfo .AuthorInfo-time {
     margin-left: 5px;
+    font-size: 12px;
+    padding: 5px 10px;
 }
 
 
