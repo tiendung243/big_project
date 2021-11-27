@@ -10,6 +10,10 @@ import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import SearchBar from 'material-ui-search-bar';
 import { useHistory } from 'react-router-dom';
+import {State} from '../reducers/index';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { type } from 'os';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
@@ -27,8 +31,10 @@ const useStyles = makeStyles((theme) => ({
 
 function Header() {
 	const classes = useStyles();
+	const dispatch = useDispatch();
 	let history = useHistory();
 	const [data, setData] = useState({ search: '' });
+	const userInfo = useSelector((state:State) => state.user);
 	const goSearch = (e:any) => {
 		history.push({
 			pathname: '/search/',
@@ -36,6 +42,11 @@ function Header() {
 		});
 		window.location.reload();
 	};
+
+	const handleLogout = () => {
+		dispatch({type:'SET_BLANK_INFO', payload:{}})
+	}
+
 	return (
 		<React.Fragment>
 			<CssBaseline />
@@ -66,37 +77,45 @@ function Header() {
 						onChange={(newValue) => setData({ search: newValue })}
 						onRequestSearch={() => goSearch(data.search)}
 					/>
-					<nav>
-						<Link
-							color="textPrimary"
+					
+					{
+						userInfo.id ? (<Button
 							href="#"
+							color="primary"
+							variant="outlined"
 							className={classes.link}
 							component={NavLink}
-							to="/register"
+							onClick={handleLogout}
+							to="/logout"
 						>
-							Register
-						</Link>
-					</nav>
-					<Button
-						href="#"
-						color="primary"
-						variant="outlined"
-						className={classes.link}
-						component={NavLink}
-						to="/login"
-					>
-						Login
-					</Button>
-					<Button
-						href="#"
-						color="primary"
-						variant="outlined"
-						className={classes.link}
-						component={NavLink}
-						to="/logout"
-					>
-						Logout
-					</Button>
+							Logout
+						</Button>) : (
+							<>
+								<nav>
+									<Link
+										color="textPrimary"
+										href="#"
+										className={classes.link}
+										component={NavLink}
+										to="/register"
+									>
+										Register
+									</Link>
+								</nav>
+								<Button
+									href="#"
+									color="primary"
+									variant="outlined"
+									className={classes.link}
+									component={NavLink}
+									to="/login"
+								>
+									Login
+								</Button>
+							</>
+						)
+					}
+					
 				</Toolbar>
 			</AppBar>
 		</React.Fragment>

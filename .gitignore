@@ -3,3 +3,5 @@
 /it_learn/settings.py
 /*/__init__.py
 *.pyc
+/accounts/__pycache__
+/app/__pycache__

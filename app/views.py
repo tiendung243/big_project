@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from .serializers import QuestionSerializer, CommentSerializer
 from rest_framework import filters
 from datetime import datetime
+from django.db.models import F
 
 
 class PostUserWritePermission(BasePermission):
@@ -176,10 +177,31 @@ class DeleteQuestion(generics.DestroyAPIView):
     serializer_class = QuestionSerializer
 
 
-class CreateComment(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_comment(request):
+    data = request.data
+    user = request.user
+    question_id = data.get('question')
+    parent_id = data.get('parent_comment')
+    content = data.get('content')
+    if not content or (question_id and parent_id):
+        return Response({"code": 400, "message": "Bad Request"})
+    question = Question.objects.filter(pk=question_id)
+    parent_comment = Comment.objects.filter(pk=parent_id)
+    comment = Comment.objects.create(content=content, author=user)
+    if question.exists():
+        comment.question = question[0]
+        question.update(number_comment=F('number_comment') + 1)
+    if parent_comment.exists():
+        comment.parent_comment = parent_comment[0]
+    comment.save()
+    return Response({'id': comment.id,
+                     'content': content,
+                     'confirmed': comment.confirmed,
+                     'last_update': comment.last_update,
+                     'created_at': comment.created,
+                     })
 
 
 def comment_instance_to_list(comment):
@@ -219,6 +241,10 @@ def get_question(request, question_id=None):
     question.view += 1
     question.save()
     author_question = question.author
+    user = request.user
+    following = True
+    if not user or question_id not in user.follow_posts.all().values_list('id', flat=True):
+        following = False
     question_data = {'id': question_id, 'content': question.content, 'title': question.title,
                      'numberComment': question.number_comment, 'comments': [],
                      'upvote': question.upvote,
@@ -233,7 +259,8 @@ def get_question(request, question_id=None):
                      'down_vote': question.down_vote,
                      'tags': list(question.tags.all().values_list('name', flat=True)),
                      'last_update': question.last_update, 'created_at': question.created,
-                     'slug': question.slug
+                     'slug': question.slug,
+                     'following': following
                      }
 
     for comment in question.comment_set.all():
@@ -318,5 +345,21 @@ def vote_post(request):
 def vote_comment(request):
     result = vote(request, 'comment')
     return Response(result)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def follow_post(request):
+    user = request.user
+    question_id = request.data.get('question_id', None)
+    question = Question.objects.get(pk=question_id)
+    if not question:
+        return Response({"code": 400, "message": "Bad Request"})
+    list_post_following = user.follow_posts.all().values_list('id', flat=True)
+    if question_id in list_post_following:
+        user.follow_posts.remove(question)
+    else:
+        user.follow_posts.add(question)
+    return Response({'code': 200})
 
 

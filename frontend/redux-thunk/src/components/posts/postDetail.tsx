@@ -15,7 +15,15 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Cookies from 'js-cookie';
 import {handleDateTimeCreated} from '../../common';
 
-export const TagContext = React.createContext({ author:{}, created:'', tags: [''], question_id: 0, update_vote: (upvote:number, down_vote:number) => {}});
+export const TagContext = React.createContext({ 
+	following:false, 
+	author:{}, 
+	created:'', 
+	tags: [''], 
+	question_id: 0, 
+	update_vote: (upvote:number, down_vote:number) => {},
+	update_following: () => {}
+});
 
 export default function Post() {
 	const { id } : {id : string} = useParams();
@@ -52,11 +60,14 @@ export default function Post() {
 		upvote: number,
 		down_vote: number,
 		tags: string[],
-		author: IAuthor
+		author: IAuthor,
+		following: boolean
     };
 
 	const [data, setData] = useState<Ipost>({
-		title: '', content: '', numberComment:0, created_at:'', last_update: '', comments: [], upvote: 0, view: 0 ,down_vote: 0, tags: [],
+		title: '', content: '', numberComment:0, created_at:'', 
+		following: false, last_update: '', comments: [], upvote: 0, 
+		view: 0 ,down_vote: 0, tags: [],
 		author: {first_name: '', last_name: '', image: '', username: '', use_full_comment:0}
 	});
 
@@ -70,7 +81,14 @@ export default function Post() {
 		})
 	}
 
-	const [postComment, setPostComment] = useState();
+	const update_following = () => {
+		setData({
+			...data,
+			following: !data.following
+		})
+	}
+
+	const [postComment, setPostComment] = useState("");
 	// const [comments, setComments] = useState();
 
 	function handleSubmit(e:any) {
@@ -88,7 +106,8 @@ export default function Post() {
 				child_comments: []
 			}];
 
-			setData({...data, comments: comments});
+			setData({...data, comments: comments, numberComment: data.numberComment + 1});
+			setPostComment("");
 		});
 	}
 	const handleDateTime = handleDateTimeCreated(data.created_at);
@@ -121,7 +140,14 @@ export default function Post() {
 						<ButtonAddQuestion />
 					</div>
 				</div>
-				<TagContext.Provider value={{ author:data.author, created:handleDateTime, tags: data.tags, question_id: + id, update_vote: updateVote}}>
+				<TagContext.Provider value={{ 
+						following: data.following,
+						author:data.author, 
+						created:handleDateTime, 
+						tags: data.tags, 
+						question_id: + id, 
+						update_vote: updateVote,
+						update_following: update_following}}>
 					<QuestionTop upvote={data.upvote} down_vote={data.down_vote} content={data.content}/>
 				</TagContext.Provider>
 				<h2> {data.numberComment} Answers</h2>
@@ -133,7 +159,7 @@ export default function Post() {
 					<CKEditor
 						editor={ClassicEditor}
 						name="postComment"
-						data=""
+						data={postComment}
 					
 						onChange={(event: any, editor: any) => {
 							const data = editor.getData();

@@ -16,9 +16,9 @@ urlpatterns = [
     # path('comments/<int:question_id>/', get_comments),
 
     # crud comment
-    path('comment/create/', views.CreateComment.as_view(), name='create_post'),
+    path('comment/create/', views.create_comment, name='create_post'),
     path('comment/vote', views.vote_comment, name='vote_comment'),
-
+    path('post/follow', views.follow_post, name='follow_post')
 ]
 
 """ Concrete View Classes

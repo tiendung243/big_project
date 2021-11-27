@@ -26,7 +26,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="7a41ae28-ff36-4dd2-a41d-871af1a8feb4">
-        <schema name="itlearn4" object-types="table, view, procedure, function, constraint, index, column, dataset trigger" />
+        <schema name="itlearn4" object-types="table, view" />
       </connection>
     </loaded-nodes>
   </component>
@@ -40,6 +40,13 @@
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="7a41ae28-ff36-4dd2-a41d-871af1a8feb4" />
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="7a41ae28-ff36-4dd2-a41d-871af1a8feb4" dataset="itlearn4.accounts_authuser" active-filter-id="0e7357fa-1142-4acd-94ec-94aebe0d5395">
+      <filter id="0e7357fa-1142-4acd-94ec-94aebe0d5395" name="0" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="id" operator="!=" value="0" active="true" />
+      </filter>
+    </filter-actions>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

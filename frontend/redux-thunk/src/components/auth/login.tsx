@@ -15,6 +15,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {State} from '../../reducers/index';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -52,6 +54,8 @@ export default function SignIn() {
 		});
 	};
 
+	const dispatch = useDispatch();
+
 	const handleSubmit = (e:any) => {
 		e.preventDefault();
 		console.log(formData);
@@ -66,9 +70,10 @@ export default function SignIn() {
 				localStorage.setItem('refresh_token', res.data.refresh);
 				axiosInstance.defaults.headers.common["Authorization"] = localStorage.getItem('access_token') ?
 					`JWT ${localStorage.getItem('access_token')}` : '';
-				history.push('/');
-				//console.log(res);
-				//console.log(res.data);
+				axiosInstance.get('api/user/getinfo/').then((result) => {
+					dispatch({type: 'SET_USER_INFO', payload: result.data});
+					history.push('/');
+				});
 			});
 	};
 
