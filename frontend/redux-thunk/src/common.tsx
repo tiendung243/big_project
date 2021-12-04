@@ -22,7 +22,7 @@ export function slugify (value:string) {
 export function handleDateTimeCreated(datetime: string){
     const time = new Date(datetime);
     if (!time.valueOf()){
-        return '';
+        return '1 minute ago';
     }
     const now = new Date();
     const ms  = now.getTime() - time.getTime();
@@ -35,7 +35,7 @@ export function handleDateTimeCreated(datetime: string){
     }
     let second : number= Math.floor(ms/1000);
     if (!second) {
-        return '';
+        return '1 minute ago';
     }
     timeHandle.year = Math.floor(second/31536000);
     second = second - 31536000 * timeHandle.year;

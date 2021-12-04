@@ -13,5 +13,4 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ('content', 'question', 'author', 'parent_comment')
 
 
-admin.site.register(Category)
 admin.site.register(Tag)

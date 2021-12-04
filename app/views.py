@@ -123,8 +123,8 @@ def create_question(request):
         for tag in list_tags:
             tag_record = Tag.objects.filter(name=tag)
             if tag_record.exists():
-                tag_record.number_posts += 1
-                tag_record.save()
+                tag_record[0].number_posts += 1
+                tag_record[0].save()
                 new_question.tags.add(tag_record[0].pk)
             else:
                 tag_record = Tag.objects.create(name=tag, number_posts=1)

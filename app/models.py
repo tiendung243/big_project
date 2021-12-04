@@ -5,13 +5,6 @@ from django.utils import timezone
 from ckeditor_uploader.fields import RichTextUploadingField
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
 class Question(models.Model):
     class QuestionObject(models.Manager):
         def get_queryset(self):
@@ -22,7 +15,6 @@ class Question(models.Model):
         ('published', 'Published')
     )
 
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
     title = models.CharField(max_length=250)
     excerpt = models.TextField(null=True)
     content = RichTextUploadingField()
