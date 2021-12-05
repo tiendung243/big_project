@@ -53,3 +53,16 @@
     width: 100%;
     height: 100px;
 }
+
+.register-witch {
+    padding: 15px;
+    width: 250px;
+    background: #e2f2fd;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.register-switch-text {
+    font-style: italic;
+    color: gray;
+}

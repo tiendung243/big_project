@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import ButtonAddQuestion from '../atoms/addQuestion';
 import QuestionTop from '../molecules/Question';
 import Comment from '../molecules/Comment';
+import Button from '@material-ui/core/Button';
 
 import {useSelector} from 'react-redux';
 import {State} from '../../reducers/index';
@@ -17,7 +18,7 @@ import {handleDateTimeCreated} from '../../common';
 
 export const TagContext = React.createContext({ 
 	following:false, 
-	author:{}, 
+	author:{id:-1, }, 
 	created:'', 
 	tags: [''], 
 	question_id: 0, 
@@ -34,7 +35,8 @@ export default function Post() {
 		last_name: string,
 		image: string,
 		username: string,
-		use_full_comment: number
+		use_full_comment: number,
+		id: number
 	}
 
 	interface IComment {
@@ -46,7 +48,8 @@ export default function Post() {
 		created_at: string,
 		upvote: number,
 		down_vote: number,
-		child_comments: any
+		child_comments: any,
+		following: boolean
 	}
 
     interface Ipost {
@@ -68,7 +71,7 @@ export default function Post() {
 		title: '', content: '', numberComment:0, created_at:'', 
 		following: false, last_update: '', comments: [], upvote: 0, 
 		view: 0 ,down_vote: 0, tags: [],
-		author: {first_name: '', last_name: '', image: '', username: '', use_full_comment:0}
+		author: {id:-1, first_name: '', last_name: '', image: '', username: '', use_full_comment:0}
 	});
 
 	const userInfo = useSelector((state:State) => state.user);
@@ -155,27 +158,37 @@ export default function Post() {
 				{data.comments.map(comment => 
 					<Comment questionId={id} data={comment}/>
 				)}
-				<form onSubmit={(e) => handleSubmit(e)} className="form_comment">
-					<h2> Write your comment </h2>
-					<CKEditor
-						editor={ClassicEditor}
-						name="postComment"
-						data={postComment}
-					
-						onChange={(event: any, editor: any) => {
-							const data = editor.getData();
-							console.log(data);
-							setPostComment(data);
-						}}
-						onBlur={(event: any, editor: any) => {
-							console.log("Blur.", editor);
-						}}
-						onFocus={(event: any, editor: any) => {
-							console.log("Focus.", editor);
-						}}
-					/>
-					<input type="submit" value="Submit" />
-				</form>
+				{userInfo.id ? (
+					<form onSubmit={(e) => handleSubmit(e)} className="form_comment">
+						<h2> Write your comment </h2>
+						<CKEditor
+							editor={ClassicEditor}
+							name="postComment"
+							data={postComment}
+						
+							onChange={(event: any, editor: any) => {
+								const data = editor.getData();
+								console.log(data);
+								setPostComment(data);
+							}}
+							onBlur={(event: any, editor: any) => {
+								console.log("Blur.", editor);
+							}}
+							onFocus={(event: any, editor: any) => {
+								console.log("Focus.", editor);
+							}}
+						/>
+						<input type="submit" value="Submit" />
+					</form>
+				): (
+					<div className="register-witch">
+						<p className="register-switch-text"> Register to write your comment</p>
+						<Button 
+							color="primary" 
+							variant="contained"
+						> Go to register </Button>
+					</div>
+				)}
 			</div>
 		</Container>
 	);

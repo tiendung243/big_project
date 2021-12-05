@@ -42,7 +42,7 @@ function Posts () {
 function App() {
 	const dispatch = useDispatch();
 	useEffect(() => {
-		axiosInstance.get('user/getinfo/').then((res) => {
+		axiosInstance.get('/user/getinfo/').then((res) => {
 			console.log('user info', res.data);
 			dispatch({type: 'SET_USER_INFO', payload: res.data});
 		});

@@ -13,8 +13,8 @@ from datetime import datetime
 from django.db.models import F
 
 
-class PostUserWritePermission(BasePermission):
-    message = 'Editing posts is restricted to the author only.'
+class UserWritePermission(BasePermission):
+    message = 'Editing object is restricted to the author only.'
 
     def has_object_permission(self, request, view, obj):
         # neu method la get list, get object thi co quyen
@@ -172,7 +172,7 @@ def edit_question(request, pk):
 
 
 class DeleteQuestion(generics.DestroyAPIView):
-    permission_classes = [PostUserWritePermission]
+    permission_classes = [UserWritePermission]
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
@@ -202,6 +202,12 @@ def create_comment(request):
                      'last_update': comment.last_update,
                      'created_at': comment.created,
                      })
+
+
+@api_view(['POST'])
+@permission_classes([UserWritePermission])
+def edit_comment(request):
+    pass
 
 
 def comment_instance_to_list(comment):
@@ -254,7 +260,8 @@ def get_question(request, question_id=None):
                          'last_name': author_question.last_name,
                          'image': author_question.image.name,
                          'user_name': author_question.user_name,
-                         'use_full_comment': author_question.use_full_comment
+                         'use_full_comment': author_question.use_full_comment,
+                         'id': author_question.pk
                      },
                      'down_vote': question.down_vote,
                      'tags': list(question.tags.all().values_list('name', flat=True)),
@@ -265,6 +272,9 @@ def get_question(request, question_id=None):
 
     for comment in question.comment_set.all():
         author = comment.author
+        comment_following = True
+        if user.is_anonymous or comment.pk not in user.follow_comments.all().values_list('id', flat=True):
+            comment_following = False
         current_comment = {
             'id': comment.id,
             'content': comment.content,
@@ -272,13 +282,15 @@ def get_question(request, question_id=None):
                        'last_name': author.last_name,
                        'user_name': author.user_name,
                        'image': author.image.name,
-                       'use_full_comment': author.use_full_comment
+                       'use_full_comment': author.use_full_comment,
+                       'id': author.pk
                        },
             'confirmed': comment.confirmed,
             'last_update': str(comment.last_update),
             'created_at': str(comment.created),
             'upvote': comment.upvote,
-            'down_vote': comment.down_vote
+            'down_vote': comment.down_vote,
+            'following': comment_following
         }
         list_child_comments = []
         for child_comment in comment.comment_set.all():
@@ -362,5 +374,28 @@ def follow_post(request):
     else:
         user.follow_posts.add(question)
     return Response({'code': 200})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def follow_comment(request):
+    user = request.user
+    comment_id = request.data.get('comment_id', None)
+    comment = Comment.objects.get(pk=comment_id)
+    if not comment:
+        return Response({"code": 400, "message": "Bad Request"})
+    list_comment_following = user.follow_comments.all().values_list('id', flat=True)
+    if comment_id in list_comment_following:
+        user.follow_comments.remove(comment)
+    else:
+        user.follow_comments.add(comment)
+    return Response({'code': 200})
+
+# todo:
+# question : ok
+# comment: follow comment method, => react => create following state in comment component
+# parent comment edit => show ckeditor in right comment 's position, views, urls for edit comment
+# child comment edit => show inline text field like when create child comment right child comment's position.
+# check if post, or comment is edited => show in authorInfor component 'edited at time..'
 
 

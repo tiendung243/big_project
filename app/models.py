@@ -56,6 +56,7 @@ class Comment(models.Model):
     parent_comment = models.ForeignKey('Comment', on_delete=models.CASCADE, blank=True, null=True)
     confirmed = models.BooleanField(default=False)
     last_update = models.DateTimeField(default=timezone.now)
+    followed = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='follow_comments')
 
 
 class VoteQuestion(models.Model):

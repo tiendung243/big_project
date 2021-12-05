@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Comment.css';
 import axiosInstance from '../../axios';
-import QuestionShare from '../atoms/sharingQuetion'; 
+import FollowComment from '../atoms/followComment'; 
 import AuthorInfo from '../atoms/authorInfo';
 import VotePoint from '../atoms/votePoint';
 import CommentContent from '../atoms/commentContent';
@@ -16,6 +16,7 @@ function Comment(props:any) {
     const data = props.data;
     const userInfo = useSelector((state:State) => state.user);
     const [showCreateComment, setShowCreateComment] = useState(false);
+    const [following, setFollowing] = useState(props.following);
 
 	function handleSubmit(e:any) {
 		e.preventDefault();
@@ -27,7 +28,6 @@ function Comment(props:any) {
 			content: postReply,
 		}).then((res) => {
 			const new_comment = res.data;
-            console.log('new child comment',userInfo);
 			setChildComment([...childComments, {
                 content: new_comment.content,
                 created: new_comment.created_at,
@@ -48,7 +48,7 @@ function Comment(props:any) {
                 <CommentContent content={data.content}/>
             </div>
             <div className="QuestionTop">
-                <QuestionShare />
+                <FollowComment comment_id={data.id}/>
                 <AuthorInfo author={data.author} isAsk={false} created={data.created_at ? handleDateTimeCreated(data.created_at): '1 minute '}/>
             </div>
             <div className="ListChildComments">
@@ -58,16 +58,18 @@ function Comment(props:any) {
                     ) : ''
                 }
             </div>
-            <div className="ReplyCreate">
-                <p onClick={()=> setShowCreateComment(true)}>Create a reply</p>
-                {
-                    showCreateComment ? (<form onSubmit={(e) => handleSubmit(e)} className="form_reply">
-                        <input className="post_reply" name="postComment" placeholder="Your reply" value={postReply} onChange={handleOnChange} />
-                        <input type="submit" value="Submit" />
-				    </form>) : ''
-                }
-                
-            </div>
+            {userInfo.id ? (
+                <div className="ReplyCreate">
+                    <p onClick={()=> setShowCreateComment(true)}>Create a reply</p>
+                    {
+                        showCreateComment ? (<form onSubmit={(e) => handleSubmit(e)} className="form_reply">
+                            <input className="post_reply" name="postComment" placeholder="Your reply" value={postReply} onChange={handleOnChange} />
+                            <input type="submit" value="Submit" />
+                        </form>) : ''
+                    }
+                </div>
+            ) : ''}
+            
             <br/>
         </div>
     )
