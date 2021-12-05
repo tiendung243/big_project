@@ -3,7 +3,7 @@ const initialState = {
     first_name: '',
     last_name: '',
     image: '',
-    username: '',
+    user_name: '',
     id: 0
 }
 

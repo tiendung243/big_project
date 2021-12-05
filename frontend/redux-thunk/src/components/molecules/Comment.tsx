@@ -16,7 +16,6 @@ function Comment(props:any) {
     const data = props.data;
     const userInfo = useSelector((state:State) => state.user);
     const [showCreateComment, setShowCreateComment] = useState(false);
-    console.log('data author', data.author);
 
 	function handleSubmit(e:any) {
 		e.preventDefault();
@@ -28,10 +27,11 @@ function Comment(props:any) {
 			content: postReply,
 		}).then((res) => {
 			const new_comment = res.data;
+            console.log('new child comment',userInfo);
 			setChildComment([...childComments, {
                 content: new_comment.content,
                 created: new_comment.created_at,
-                author: [userInfo.id, userInfo.first_name, userInfo.image, userInfo.last_name]
+                author: [userInfo.id, userInfo.user_name, userInfo.image, userInfo.last_name]
             }]);
             setPostReply('');
 		});
@@ -44,7 +44,7 @@ function Comment(props:any) {
     return (
         <div>
             <div className="QuestionContent">
-                <VotePoint upvote={data.upvote} down_vote={data.downvote} type='comment' comment_id={data.id}/>
+                <VotePoint upvote={data.upvote} down_vote={data.down_vote} type='comment' comment_id={data.id}/>
                 <CommentContent content={data.content}/>
             </div>
             <div className="QuestionTop">

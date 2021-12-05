@@ -10,7 +10,7 @@ function AuthorInfo(props:any) {
             <div className="AuthorInfo-image">
                 <a href=""><img src={props.author.image} alt="" /></a>
                 <div className="right">
-                    <a href=""><p>{props.author.first_name} {props.author.last_name}</p></a>
+                    <a href=""><p>{props.author.user_name}</p></a>
                     <p>{props.author.use_full_comment}</p>
                 </div>
             </div>

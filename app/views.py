@@ -52,7 +52,7 @@ def get_top_list_question(request):
             'vote': question.upvote - question.down_vote,
             'title': question.title,
             'created': str(question.created),
-            'author': {'id': author.id, 'first_name': author.first_name},
+            'author': {'id': author.id, 'first_name': author.first_name or author.user_name},
             'tags': [tag.name for tag in question.tags.all()]
         })
     return Response({'code': 200, 'questions': result})
@@ -207,7 +207,7 @@ def create_comment(request):
 def comment_instance_to_list(comment):
     comment_dict = {'content': comment.content, 'created': str(comment.created)}
     author = comment.author
-    comment_dict['author'] = [author.id, author.first_name, str(author.image), author.last_name]
+    comment_dict['author'] = [author.id, author.first_name or author.user_name, str(author.image), author.last_name]
     return comment_dict
 
 
@@ -243,17 +243,17 @@ def get_question(request, question_id=None):
     author_question = question.author
     user = request.user
     following = True
-    if not user or question_id not in user.follow_posts.all().values_list('id', flat=True):
+    if user.is_anonymous or question_id not in user.follow_posts.all().values_list('id', flat=True):
         following = False
     question_data = {'id': question_id, 'content': question.content, 'title': question.title,
                      'numberComment': question.number_comment, 'comments': [],
                      'upvote': question.upvote,
                      'view': question.view,
                      'author': {
-                         'first_name': author_question.first_name,
+                         'first_name': author_question.first_name or author_question.user_name,
                          'last_name': author_question.last_name,
                          'image': author_question.image.name,
-                         'username': author_question.user_name,
+                         'user_name': author_question.user_name,
                          'use_full_comment': author_question.use_full_comment
                      },
                      'down_vote': question.down_vote,
@@ -268,8 +268,9 @@ def get_question(request, question_id=None):
         current_comment = {
             'id': comment.id,
             'content': comment.content,
-            'author': {'first_name': author.first_name,
+            'author': {'first_name': author.first_name or author.user_name,
                        'last_name': author.last_name,
+                       'user_name': author.user_name,
                        'image': author.image.name,
                        'use_full_comment': author.use_full_comment
                        },
@@ -277,7 +278,7 @@ def get_question(request, question_id=None):
             'last_update': str(comment.last_update),
             'created_at': str(comment.created),
             'upvote': comment.upvote,
-            'downvote': comment.down_vote
+            'down_vote': comment.down_vote
         }
         list_child_comments = []
         for child_comment in comment.comment_set.all():

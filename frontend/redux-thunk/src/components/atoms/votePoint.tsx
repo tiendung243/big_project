@@ -1,3 +1,4 @@
+import React from 'react';
 import './votePoint.css';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -9,7 +10,6 @@ import { TagContext } from '../posts/postDetail';
 function VotePoint(props:any) {
     
     const {question_id} = useContext(TagContext);
-
     const [upvote, setUpvote] = useState(props.upvote);
     const [down_vote, setDownvote] = useState(props.down_vote);
 
@@ -55,4 +55,4 @@ function VotePoint(props:any) {
     )
 }
 
-export default VotePoint;
+export default React.memo(VotePoint);

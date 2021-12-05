@@ -5,3 +5,8 @@
 *.pyc
 /accounts/__pycache__
 /app/__pycache__
+
+.idea/
+accounts/__pycache__/
+app/__pycache__/
+it_learn/__pycache__/

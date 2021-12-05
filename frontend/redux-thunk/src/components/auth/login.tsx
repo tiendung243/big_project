@@ -70,7 +70,7 @@ export default function SignIn() {
 				localStorage.setItem('refresh_token', res.data.refresh);
 				axiosInstance.defaults.headers.common["Authorization"] = localStorage.getItem('access_token') ?
 					`JWT ${localStorage.getItem('access_token')}` : '';
-				axiosInstance.get('api/user/getinfo/').then((result) => {
+				axiosInstance.get('user/getinfo/').then((result) => {
 					dispatch({type: 'SET_USER_INFO', payload: result.data});
 					history.push('/');
 				});

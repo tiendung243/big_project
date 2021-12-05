@@ -1,4 +1,3 @@
-from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -41,7 +40,7 @@ def getCurrentUser(request):
     if not user.is_authenticated:
         return Response({})
     return Response({
-        'username': user.user_name,
+        'user_name': user.user_name,
         'first_name': user.first_name,
         'last_name': user.last_name,
         'image': user.image.name,

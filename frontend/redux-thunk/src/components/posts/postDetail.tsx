@@ -101,10 +101,11 @@ export default function Post() {
 			const comments = [...data.comments, {
 				...new_comment,
 				upvote: 0,
-				downvote: 0,
+				down_vote: 0,
 				author: userInfo,
 				child_comments: []
 			}];
+			console.log('comments',comments);
 
 			setData({...data, comments: comments, numberComment: data.numberComment + 1});
 			setPostComment("");
@@ -133,7 +134,7 @@ export default function Post() {
 						<p className='header-title' >{data.title}</p>
 						<div className="question-info">
 							<p> Asked {handleDateTime}</p>
-							<p>Viewed {data.view} times</p>
+							<p> Viewed {data.view} times</p>
 						</div>
 					</div>
 					<div className="header-right">
