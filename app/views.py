@@ -6,7 +6,6 @@ from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated, 
     BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, permission_classes
-from django.shortcuts import get_object_or_404
 from .serializers import QuestionSerializer, CommentSerializer
 from rest_framework import filters
 from datetime import datetime
@@ -135,7 +134,7 @@ def create_question(request):
 
 # has_object_permission
 @api_view(['PUT'])
-@permission_classes([AllowAny])
+@permission_classes([UserWritePermission])
 def edit_question(request, pk):
     data = request.data
     title = data.get('title')
@@ -204,14 +203,26 @@ def create_comment(request):
                      })
 
 
-@api_view(['POST'])
+@api_view(['PUT'])
 @permission_classes([UserWritePermission])
-def edit_comment(request):
-    pass
+def edit_comment(request, pk):
+    content = request.data.get('content')
+    comment = Comment.objects.get(pk=pk)
+    if not comment:
+        return Response({"code": 400, "message": "Bad Request"})
+    comment.content = content
+    comment.save()
+    return Response({'code': 200, 'message': 'success', 'id': pk, 'content': content})
+
+
+class CommentDelete(generics.DestroyAPIView):
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+    permission_classes = [UserWritePermission]
 
 
 def comment_instance_to_list(comment):
-    comment_dict = {'content': comment.content, 'created': str(comment.created)}
+    comment_dict = {'content': comment.content, 'created': str(comment.created), 'id': comment.pk}
     author = comment.author
     comment_dict['author'] = [author.id, author.first_name or author.user_name, str(author.image), author.last_name]
     return comment_dict
@@ -393,7 +404,6 @@ def follow_comment(request):
 
 # todo:
 # question : ok
-# comment: follow comment method, => react => create following state in comment component
 # parent comment edit => show ckeditor in right comment 's position, views, urls for edit comment
 # child comment edit => show inline text field like when create child comment right child comment's position.
 # check if post, or comment is edited => show in authorInfor component 'edited at time..'

@@ -1,0 +1,17 @@
+.BasicModal .modal.show {
+    display: block !important;
+}
+.BasicModal .modal-content {
+    margin-top: 50%;
+    transform: translateY(-50%);
+}
+
+.BasicModal .overlay {
+    background-color: gray;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}

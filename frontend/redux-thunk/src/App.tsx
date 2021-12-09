@@ -1,5 +1,7 @@
 import React,{ useEffect, useState } from 'react';
 import './App.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
 import PostLoading from './components/posts/postloading';
 import ListQuestionTop from './components/atoms/listQuestionTop';
 import axiosInstance from './axios';

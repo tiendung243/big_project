@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axiosInstance from '../../axios';
 import { useParams, useHistory} from 'react-router-dom';
 import './postDetail.css';
@@ -16,15 +16,18 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Cookies from 'js-cookie';
 import {handleDateTimeCreated} from '../../common';
 
-export const TagContext = React.createContext({ 
-	following:false, 
-	author:{id:-1, }, 
-	created:'', 
+const initialContext = {
+	following: false, 
+	author: {id:-1, }, 
+	created: '', 
 	tags: [''], 
 	question_id: 0, 
 	update_vote: (upvote:number, down_vote:number) => {},
-	update_following: () => {}
-});
+	update_following: () => {},
+};
+
+export const TagContext = React.createContext(initialContext);
+
 
 export default function Post() {
 	const { id } : {id : string} = useParams();
@@ -91,8 +94,26 @@ export default function Post() {
 		})
 	}
 
+	const updateEditComment = (id:number, content: string) => {
+		console.log(id, content);
+		let temp_comments = [];
+		for(let comment of data.comments){
+			if (comment.id === id) {
+				temp_comments.push({
+					...comment,
+					content: content
+				})
+			} else {
+				temp_comments.push(comment);
+			}
+		}
+		setData({
+			...data,
+			comments: temp_comments
+		})
+	}
+
 	const [postComment, setPostComment] = useState("");
-	// const [comments, setComments] = useState();
 
 	function handleSubmit(e:any) {
 		e.preventDefault();
@@ -114,6 +135,7 @@ export default function Post() {
 			setPostComment("");
 		});
 	}
+
 	const handleDateTime = handleDateTimeCreated(data.created_at);
 
 	const csrfCookie = Cookies.get('csrftoken');
@@ -151,16 +173,17 @@ export default function Post() {
 						tags: data.tags, 
 						question_id: + id, 
 						update_vote: updateVote,
-						update_following: update_following}}>
+						update_following: update_following,
+						}}>
 					<QuestionTop upvote={data.upvote} down_vote={data.down_vote} content={data.content}/>
 				</TagContext.Provider>
-				<h2> {data.numberComment} Answers</h2>
+				<h4> {data.numberComment} Answers</h4>
 				{data.comments.map(comment => 
-					<Comment questionId={id} data={comment}/>
+					<Comment questionId={id} data={comment} updateComment={updateEditComment}/>
 				)}
 				{userInfo.id ? (
 					<form onSubmit={(e) => handleSubmit(e)} className="form_comment">
-						<h2> Write your comment </h2>
+						<h5> Write your comment </h5>
 						<CKEditor
 							editor={ClassicEditor}
 							name="postComment"
@@ -168,7 +191,6 @@ export default function Post() {
 						
 							onChange={(event: any, editor: any) => {
 								const data = editor.getData();
-								console.log(data);
 								setPostComment(data);
 							}}
 							onBlur={(event: any, editor: any) => {

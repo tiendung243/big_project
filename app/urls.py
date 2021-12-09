@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import QuestionListDetailFilter, DeleteQuestion
+from .views import QuestionListDetailFilter, DeleteQuestion, CommentDelete
 from . import views
 
 app_name = 'app'
@@ -18,6 +18,7 @@ urlpatterns = [
     # crud comment
     path('comment/create/', views.create_comment, name='create_post'),
     path('comment/edit/<int:pk>/', views.edit_comment, name='create_post'),
+    path('comment/delete/<int:pk>/', CommentDelete.as_view(), name='delete_comment'),
     path('comment/vote', views.vote_comment, name='vote_comment'),
     path('post/follow', views.follow_post, name='follow_post'),
     path('comment/follow', views.follow_comment, name='follow_comment'),
