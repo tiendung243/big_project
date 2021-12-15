@@ -6,7 +6,8 @@ app_name = 'app'
 
 urlpatterns = [
     path('', views.get_top_list_question, name='list_latest_post'),
-    path('search/', QuestionListDetailFilter.as_view(), name='post_search'),
+    # path('search/', QuestionListDetailFilter.as_view(), name='post_search'),
+    path('search/', views.PublisherDocumentView.as_view({'get': 'list'}), name='post_search'),
     #     crud question
     path('post/<int:question_id>/', views.get_question),
     path('post/create/', views.create_question, name='create_post'),

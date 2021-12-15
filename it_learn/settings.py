@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
     'app',
     'accounts',
     'corsheaders',
     'rest_framework',
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
 ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -161,8 +163,8 @@ CORS_ALLOWED_ORIGINS = [
 AUTH_USER_MODEL = "accounts.AuthUser"
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
@@ -174,3 +176,10 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200'
+    },
+}
+# https://django-elasticsearch-dsl.readthedocs.io/en/latest/quickstart.html

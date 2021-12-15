@@ -42,9 +42,8 @@ const Search = () => {
 	const search = 'search';
     interface IPost {
         id: number,
-        slug: string,
         title: string,
-        excerpt: string,
+        content: string,
     }
     interface IAppState {
         search: string,
@@ -58,6 +57,7 @@ const Search = () => {
 	useEffect(() => {
 		axiosInstance.get(search + '/' + window.location.search).then((res) => {
 			const allPosts:Array<IPost> = res.data;
+			console.log(res);
 			setAppState({...appState, posts: allPosts });
 		});
 	}, [setAppState]);
@@ -73,7 +73,7 @@ const Search = () => {
 								<Card>
 									<Link
 										color="textPrimary"
-										href={'/post/' + post.slug}
+										href={'/post/' + post.id}
 										className={classes.link}
 									>
 										<CardMedia
@@ -93,7 +93,7 @@ const Search = () => {
 										</Typography>
 										<div className={classes.postText}>
 											<Typography color="textSecondary">
-												{post.excerpt.substr(0, 40)}...
+												{post.content.substr(0, 40)}...
 											</Typography>
 										</div>
 									</CardContent>

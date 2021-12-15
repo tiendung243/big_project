@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Question, Comment
 from accounts.models import AuthUser
+from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+from .documents import QuestionDocument
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -18,6 +20,19 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ('id', 'title', 'author', 'slug', 'excerpt', 'content')
+
+
+class QuestionElasticSearchSerializer(DocumentSerializer):
+    class Meta:
+        model = Question
+        document = QuestionDocument
+        fields = ['title', 'content', 'id']
+
+        def get_location(self, obj):
+            try:
+                return obj.location.to_dict()
+            except:
+                return {}
 
 
 class CommentSerializer(serializers.ModelSerializer):
