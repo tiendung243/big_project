@@ -29,3 +29,12 @@ declare module 'js-cookie' {
     export = Cookies
 }
 
+declare module '@material-ui/lab/TabPanel' {
+    const TabPanel: React.FunctionComponent<{
+        value: string,
+        index: number,
+        children?: string,
+    }>
+    export = TabPanel;
+}
+

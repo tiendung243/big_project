@@ -17,6 +17,7 @@ import Search from './components/posts/search';
 import Edit from './components/posts/postEdit';
 import Create from './components/posts/postCreate';
 import LeftBar from './components/leftBar';
+import User from './components/user/user';
 
 import {useDispatch} from 'react-redux';
 
@@ -62,12 +63,13 @@ function App() {
 					<Route path="/login" component={Login}/>
 					<Route path="/logout" component={Logout}/>
 					<Route path="/search" component={Search} />
+					<Route path="/user" component={User} />
 					<Route exact path="/post/create" component={Create} />
 					<Route exact path="/post/:id" component={Single}/>
 					<Route exact path="/post/edit/:id" component={Edit} />
 				</Switch>
 			</div>
-			<Footer />
+			{/* <Footer /> */}
 			</React.StrictMode>
 		</Router>
 	)

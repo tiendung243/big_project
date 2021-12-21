@@ -49,11 +49,11 @@ pre code {
     background: none;
 }
 
-.QuestionCreate fieldset {
+fieldset {
     top: 0 !important;
 }
 
-.QuestionCreate label.Mui-required {
+label.Mui-required {
     background-color: white;
 }
 

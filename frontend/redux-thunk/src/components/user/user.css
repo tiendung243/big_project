@@ -1,0 +1,54 @@
+.Basic__Infor {
+    margin-top: 20px;
+    margin-left: 60px;
+}
+
+.Basic__Infor h3 {
+    font-size: 2rem;
+}
+
+.Basic__Infor-container {
+    display: flex;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.Basic__Infor-image {
+    width: 250px;
+}
+
+.Basic__Infor-image img {
+    border-radius: 5px;
+}
+
+.Basic__Infor-info {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-around;
+}
+
+.Basic__Infor-info .infor-item {
+    display: flex;
+}
+
+.Basic__Infor-info .infor-item .title {
+    font-weight: 600;
+    width: 100px;
+}
+
+.Other__Infor {
+    margin-left: 60px;
+    border: 1px solid #ede8e8;
+    border-radius: 5px;
+}
+
+.Other__Infor .Question_Stat {
+    margin-left: 15px;
+    width: 50px;
+    text-align: center;
+}
+
+.Other__Infor .MuiTabs-scroller {
+    background: #e1e1e1;
+    color: #383838;
+}

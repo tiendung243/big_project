@@ -8,7 +8,7 @@ const initialState = {
 }
 
 const userReducer = (state=initialState, action:any) => {
-    switch(action.type){
+    switch(action.type) {
         case 'SET_USER_INFO':
             return action.payload;
         case 'SET_BLANK_INFO':

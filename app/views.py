@@ -6,7 +6,8 @@ from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated, 
     BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, permission_classes
-from .serializers import QuestionSerializer, CommentSerializer, QuestionElasticSearchSerializer
+from .serializers import QuestionSerializer, CommentSerializer
+# , QuestionElasticSearchSerializer
 from rest_framework import filters
 from datetime import datetime
 from django.db.models import F
@@ -19,27 +20,27 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 from .documents import QuestionDocument
 
 
-class PublisherDocumentView(DocumentViewSet):
-    permission_classes = [AllowAny]
-    document = QuestionDocument
-    serializer_class = QuestionElasticSearchSerializer
-    fielddata = True
-
-    filter_backends = [
-        FilteringFilterBackend,
-        CompoundSearchFilterBackend
-    ]
-
-    search_fields = ('title', 'content')
-    multi_match_search_fields = ('title', 'content')
-    filter_fields = {
-        'title': 'title',
-        'content': 'content',
-    }
-    fields_fields = {
-        'title': 'title',
-        'content': 'content',
-    }
+# class PublisherDocumentView(DocumentViewSet):
+#     permission_classes = [AllowAny]
+#     document = QuestionDocument
+#     serializer_class = QuestionElasticSearchSerializer
+#     fielddata = True
+#
+#     filter_backends = [
+#         FilteringFilterBackend,
+#         CompoundSearchFilterBackend
+#     ]
+#
+#     search_fields = ('title', 'content')
+#     multi_match_search_fields = ('title', 'content')
+#     filter_fields = {
+#         'title': 'title',
+#         'content': 'content',
+#     }
+#     fields_fields = {
+#         'title': 'title',
+#         'content': 'content',
+#     }
 
 
 class UserWritePermission(BasePermission):
@@ -433,7 +434,6 @@ def follow_comment(request):
     return Response({'code': 200})
 
 # todo:
-# question : ok
-# parent comment edit => show ckeditor in right comment 's position, views, urls for edit comment
-# child comment edit => show inline text field like when create child comment right child comment's position.
-# check if post, or comment is edited => show in authorInfor component 'edited at time..'
+# comment lai phan elastic search de phat trien tiep
+# bo comment phan serializer trong views.py, serializers.py import lib django-elasticsearch trong settings
+# bo comment trong urls.py
