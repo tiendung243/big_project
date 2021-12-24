@@ -119,7 +119,7 @@ function InfoItem(props:any) {
     return (
         <div className="infor-item">
             <p className='title'> {props.title}: </p>
-            <p className='value'> {props.value}</p>
+            <p className='value'> {props.value} </p>
         </div>
     )
 }

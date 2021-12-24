@@ -14,11 +14,15 @@
 }
 
 .Basic__Infor-image {
-    width: 250px;
+    width: 200px;
+    height: 200px;
+    margin-right: 50px;
 }
 
 .Basic__Infor-image img {
     border-radius: 5px;
+    width: 100%;
+    height: 100%;
 }
 
 .Basic__Infor-info {
@@ -33,7 +37,7 @@
 
 .Basic__Infor-info .infor-item .title {
     font-weight: 600;
-    width: 100px;
+    width: 105px;
 }
 
 .Other__Infor {

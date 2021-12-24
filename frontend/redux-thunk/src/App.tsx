@@ -14,10 +14,11 @@ import Login from './components/auth/login';
 import Logout from './components/auth/logout';
 import Single from './components/posts/postDetail';
 import Search from './components/posts/search';
-import Edit from './components/posts/postEdit';
+import PostEdit from './components/posts/postEdit';
 import Create from './components/posts/postCreate';
 import LeftBar from './components/leftBar';
 import User from './components/user/user';
+import UserEdit from './components/user/editUser';
 
 import {useDispatch} from 'react-redux';
 
@@ -63,10 +64,11 @@ function App() {
 					<Route path="/login" component={Login}/>
 					<Route path="/logout" component={Logout}/>
 					<Route path="/search" component={Search} />
-					<Route path="/user" component={User} />
+					<Route exact path="/user" component={User} />
+					<Route exact path="/user/edit/:id" component={UserEdit} />
 					<Route exact path="/post/create" component={Create} />
 					<Route exact path="/post/:id" component={Single}/>
-					<Route exact path="/post/edit/:id" component={Edit} />
+					<Route exact path="/post/edit/:id" component={PostEdit} />
 				</Switch>
 			</div>
 			{/* <Footer /> */}
