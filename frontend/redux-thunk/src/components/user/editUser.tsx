@@ -1,21 +1,15 @@
-import { Container } from "@material-ui/core";
+import { useEffect, useState, useRef } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import './editUser.css';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import { createContext, useEffect, useReducer, useState } from "react";
 
+import { Container } from "@material-ui/core";
 import Button from '@material-ui/core/Button';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
-function reducer(state:any, action:any) {
-    switch(action.type){
-        case 'Change_Data':
-            return {
-                ...state,
-                [action.payload.name]: action.payload.value
-            }
-        default:
-            return state;
-    }
-}
+import axiosInstance from "../../axios";
+import {State} from '../../reducers/index';
 
 function InfoItem (props:any) {
     const {name, title, value, onChangeState} = props;
@@ -28,23 +22,56 @@ function InfoItem (props:any) {
 }
 
 function EditUser(props:any) {
+    const dispatch = useDispatch();
+    let history = useHistory();
+    const imgRef = useRef<HTMLInputElement>(null);
+    const initialData = useSelector((state:State) => state.user);
+    console.log("initialData", initialData);
+    const [ avatar, setAvatar ] = useState(initialData.image);
+    const [data, setData] = useState(initialData);
+    console.log(data);
 
-    const initialData = {
-        name: 'Nguyen Tien Dung',
-        birthday: '24/03/1999',
-        username: 'dungnt',
-        number_posts: 9,
-        contact: '0327670530',
-        email: 'tiendungthemen243@gmail.com',
-        github: 'tiendung2403',
-        website: 'itlearn.com'
-    }
+    useEffect(() => {
+        if(initialData?.image) {
+            setAvatar(initialData.image);
+        }
+        setData(initialData);
+    }, [initialData]);
 
-    const [ avatar, setAvatar ] = useState('https://picsum.photos/200');
-    const [ data, dispatch ] = useReducer(reducer, initialData);
+    console.log(avatar, data);
 
     const handleChangeState = (e:any) => {
-        dispatch({type:'Change_Data', payload: {name: e.target.name, value: e.target.value}})
+        console.log(data);
+        setData({
+            ...data, [e.target.name]: e.target.value
+        });
+    }
+
+    const handleSubmit = () => {
+        let formData = new FormData();
+        const files = imgRef.current && imgRef.current.files;
+        let file:any = '';
+        if (files) {
+            file = files[0];
+        }
+        formData.append("avatar", file);
+        formData.append("first_name", data.first_name);
+        formData.append("last_name", data.last_name);
+        formData.append("company", data.company);
+        formData.append("github", data.github);
+        formData.append("website", data.website);
+        formData.append("contact", data.contact);
+        formData.append("email", data.email);
+        formData.append("about", data.about);
+        axiosInstance({
+            method: "post",
+            url: `user/edit`, 
+            data: formData,
+            headers: { "Content-Type": "multipart/form-data" },
+        }).then((response)=> {
+            console.log(response);
+            history.push('/user');
+        })
     }
 
     const handleChangeAvatar = (e:any) => {
@@ -65,17 +92,17 @@ function EditUser(props:any) {
                 <div className='Basic__Infor-container'>
                     <div className='Basic__Infor-image Basic__Infor-image-edit'>
                         <img src={avatar} />
-                        <input type="file" name="avatar" id="avatar" style={{'display':'none'}} onChange={handleChangeAvatar}/>
+                        <input type="file" name="avatar" ref={imgRef} id="avatar" style={{'display':'none'}} onChange={handleChangeAvatar}/>
                         <label htmlFor="avatar">
                             <PhotoCameraIcon />
                         </label>
                     </div>
                     <div className='Basic__Infor-info'>
                         <div className='infor-left'>
-                            <InfoItem value = {data.name} title='Name' name='name' onChangeState={handleChangeState}/>
-                            <InfoItem value = {data.birthday} title='Birthday' name='birthday' onChangeState={handleChangeState}/>
-                            <InfoItem value = {data.username} title='Username' name='username' onChangeState={handleChangeState}/>
-                            <InfoItem value = {data.number_posts} title='Number posts' name='number_posts' onChangeState={handleChangeState}/>
+                            <InfoItem value = {data.first_name} title='First Name' name='first_name' onChangeState={handleChangeState}/>
+                            <InfoItem value = {data.last_name} title='Last Name' name='last_name' onChangeState={handleChangeState}/>
+                            <InfoItem value = {data.company} title='Company' name='company' onChangeState={handleChangeState}/>
+                            <InfoItem value = {data.about} title='About' name='about' onChangeState={handleChangeState}/>
                         </div>
                         <div className='infor-right'>
                             <InfoItem value = {data.contact} title='Contact' name='contact' onChangeState={handleChangeState}/>
@@ -89,6 +116,7 @@ function EditUser(props:any) {
                     type="submit"
                     variant="contained"
                     color="primary"
+                    onClick={handleSubmit}
                 >
                     Update Info
                 </Button>

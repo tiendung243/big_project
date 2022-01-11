@@ -160,6 +160,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
 ]
 
+BACKEND_ADDR = "http://localhost:8000"
+
 AUTH_USER_MODEL = "accounts.AuthUser"
 
 SIMPLE_JWT = {

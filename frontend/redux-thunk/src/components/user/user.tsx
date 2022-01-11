@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import {State} from '../../reducers/index';
 import './user.css';
 
 import Container from '@material-ui/core/Container';
@@ -61,26 +63,31 @@ function User(props:any) {
         setActiveTab(value);
     }
 
+    const userInfo = useSelector((state:State) => state.user);
+    console.log(userInfo);
+
     return (
         <Container maxWidth="md" component="main">
             <div className='Basic__Infor'>
                 <h3>Basic information</h3>
                 <div className='Basic__Infor-container'>
                     <div className='Basic__Infor-image'>
-                        <img src="https://picsum.photos/200" alt="" />
+                        <img src={userInfo.image} alt="" />
                     </div>
                     <div className='Basic__Infor-info'>
                         <div className='infor-left'>
-                            <InfoItem title='Name' value='Nguyen Tien Dung' />
-                            <InfoItem title='Birthday' value='24/03/1999' />
-                            <InfoItem title='Username' value='dungnt' />
-                            <InfoItem title='Number posts' value='9' />
+                            <InfoItem value = {`${userInfo.first_name} ${userInfo.last_name}`} title='Name' />
+                            <InfoItem value = {userInfo.company} title='Company' />
+                            <InfoItem value = {userInfo.user_name} title='Username'/>
+                            <InfoItem value = {userInfo.number_posts} title='Number posts'/>
+                            <InfoItem value = {userInfo.about} title='About'/>
+
                         </div>
                         <div className='infor-right'>
-                            <InfoItem title='Contact' value='0327670530' />
-                            <InfoItem title='Email' value='tiendungthemen243@gmail.com' />
-                            <InfoItem title='Github' value='tiendung2403' />
-                            <InfoItem title='Website' value='itlearn.com' />
+                            <InfoItem value = {userInfo.contact} title='Contact'/>
+                            <InfoItem value = {userInfo.email} title='Email' />
+                            <InfoItem value = {userInfo.github} title='Github' />
+                            <InfoItem value = {userInfo.website} title='Website' />
                         </div>
                     </div>
                 </div>

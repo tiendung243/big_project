@@ -32,7 +32,8 @@
     font-size: 13px;
     color: gray;
     height: 30px;
-    margin-top: 20px;
+    margin-top: 10px;
+    text-align: center;
 }
 
 .Question_Row-content .content-right p{

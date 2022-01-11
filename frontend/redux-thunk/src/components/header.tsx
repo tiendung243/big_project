@@ -13,7 +13,6 @@ import { useHistory } from 'react-router-dom';
 import {State} from '../reducers/index';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { type } from 'os';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {

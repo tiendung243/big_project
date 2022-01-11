@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.conf import settings
 
 
 def upload_to(instance, filename):
@@ -51,6 +52,11 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     use_full_comment = models.IntegerField(default=0)
+    contact = models.CharField(default='', max_length=32)
+    website = models.CharField(default='', max_length=32)
+    github = models.CharField(default='', max_length=32)
+    birthday = models.DateTimeField(null=True, blank=True)
+    company = models.CharField(default='', max_length=150)
 
     objects = CustomAccountManager()
 
@@ -59,3 +65,7 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.user_name
+
+    @property
+    def get_absolute_image_url(self):
+        return "{0}{1}".format(settings.BACKEND_ADDR, self.image.url)

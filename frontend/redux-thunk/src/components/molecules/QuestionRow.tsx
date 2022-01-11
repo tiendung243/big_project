@@ -24,7 +24,7 @@ function QuestionRow(props:any) {
                         }
                     </div>
                     <div className="content-right">
-                        <p>Asked {handleDateTimeCreated(post.created)} <a href="">{post.author.first_name}</a> 12</p>
+                        <p>Asked {handleDateTimeCreated(post.created)} <br/> by <a href="">{post.author.first_name}</a></p>
                     </div>
                 </div>
             </div>

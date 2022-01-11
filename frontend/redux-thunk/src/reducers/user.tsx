@@ -3,8 +3,15 @@ const initialState = {
     first_name: '',
     last_name: '',
     image: '',
+    id: 0,
+    company: '', 
     user_name: '',
-    id: 0
+    number_posts: 0,
+    contact: '',
+    email: '',
+    github: '',
+    website: '',
+    about: ''
 }
 
 const userReducer = (state=initialState, action:any) => {

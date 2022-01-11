@@ -46,7 +46,7 @@ function Posts () {
 function App() {
 	const dispatch = useDispatch();
 	useEffect(() => {
-		axiosInstance.get('/user/getinfo/').then((res) => {
+		axiosInstance.get('/user/').then((res) => {
 			console.log('user info', res.data);
 			dispatch({type: 'SET_USER_INFO', payload: res.data});
 		});
@@ -65,7 +65,7 @@ function App() {
 					<Route path="/logout" component={Logout}/>
 					<Route path="/search" component={Search} />
 					<Route exact path="/user" component={User} />
-					<Route exact path="/user/edit/:id" component={UserEdit} />
+					<Route exact path="/user/edit" component={UserEdit} />
 					<Route exact path="/post/create" component={Create} />
 					<Route exact path="/post/:id" component={Single}/>
 					<Route exact path="/post/edit/:id" component={PostEdit} />
