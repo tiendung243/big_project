@@ -68,8 +68,9 @@ function EditUser(props:any) {
             url: `user/edit`, 
             data: formData,
             headers: { "Content-Type": "multipart/form-data" },
-        }).then((response)=> {
-            console.log(response);
+        }).then((response) => {
+            console.log('response data', response.data.data);
+            dispatch({type:'UPDATE_USER_INFO', payload:response.data.data});
             history.push('/user');
         })
     }

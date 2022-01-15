@@ -9,6 +9,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
 
 import QuestionRow from '../molecules/QuestionRow';
 
@@ -64,12 +65,20 @@ function User(props:any) {
     }
 
     const userInfo = useSelector((state:State) => state.user);
-    console.log(userInfo);
 
     return (
         <Container maxWidth="md" component="main">
             <div className='Basic__Infor'>
-                <h3>Basic information</h3>
+                <div className='title_edit-button'>
+                    <h3>Basic information</h3>
+                    <Button className='btn-edit-user'
+                        href={`/user/edit`}
+                        variant="contained"
+                        color="primary"
+                    >
+                        Edit
+                    </Button>
+                </div>
                 <div className='Basic__Infor-container'>
                     <div className='Basic__Infor-image'>
                         <img src={userInfo.image} alt="" />

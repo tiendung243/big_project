@@ -28,7 +28,6 @@ class Question(models.Model):
     down_vote = models.IntegerField(default=0)
     last_update = models.DateTimeField(default=timezone.now)
     number_bookmarked = models.IntegerField(default=0)
-    number_comment = models.IntegerField(default=0)
     followed = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='follow_posts')
 
     objects = models.Manager()

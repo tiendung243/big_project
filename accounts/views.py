@@ -62,14 +62,6 @@ def getCurrentUser(request):
 def editUser(request):
     try:
         user = request.user
-        # print(request.data)
-        # print(request.data.get('avatar'))
-
-        file = request.data.get('avatar')
-        filename, file_extension = os.path.splitext(file.name)
-        new_file_name = filename + str(uuid.uuid1()) + file_extension
-        file.name = new_file_name
-
         data = request.data
         user.first_name = data.get('first_name')
         user.last_name = data.get('last_name')
@@ -79,9 +71,27 @@ def editUser(request):
         user.email = data.get('email')
         user.company = data.get('company')
         user.about = data.get('about')
-        if file:
+        file = request.data.get('avatar')
+        if file != 'undefined':
+            filename, file_extension = os.path.splitext(file.name)
+            new_file_name = filename + str(uuid.uuid1()) + file_extension
+            file.name = new_file_name
             user.image = file
         user.save()
-        return Response({'message': 'success', 'code': 200})
+        return Response({'message': 'success', 'code': 200, 'data': {
+            'user_name': user.user_name,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'image': user.get_absolute_image_url,
+            'id': user.pk,
+            'github': user.github,
+            'website': user.website,
+            'number_posts': user.posts.all().count(),
+            'contact': user.contact,
+            'email': user.email,
+            'company': user.company,
+            'about': user.about
+            }
+        })
     except:
         return Response({'message': 'error', 'code': 500})

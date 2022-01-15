@@ -20,6 +20,9 @@ const userReducer = (state=initialState, action:any) => {
             return action.payload;
         case 'SET_BLANK_INFO':
             return initialState;
+        case 'UPDATE_USER_INFO':
+            console.log('update info', action.payload);
+            return action.payload;
         default: 
             return state;
     }
