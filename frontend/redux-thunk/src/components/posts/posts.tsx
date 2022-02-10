@@ -9,9 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
 
-import QuestionRow from '../molecules/QuestionRow';
+import PaginatedItems from '../molecules/QuestionPagination';
 
 const useStyles = makeStyles((theme) => ({
 	cardMedia: {
@@ -60,25 +59,6 @@ const Posts = (props:any) => {
 		tags: string[]
 	}
 
-	function handleDelete(e:any, id:number){
-		e.preventDefault();
-		axiosInstance
-			.delete('post/delete/' + id)
-			.catch(function (error:any) {
-				if (error.response) {
-					console.log(error.response.data);
-					console.log(error.response.status);
-					console.log(error.response.headers);
-				}
-			})
-			.then(function () {
-					history.push({
-						pathname: '/',
-					});
-					window.location.reload();
-			});
-	}
-
 	if (!posts || posts.length === 0) return <p>Can not find any posts, sorry</p>;
 	return (
 		<React.Fragment>
@@ -87,13 +67,7 @@ const Posts = (props:any) => {
 					<TableContainer>
 						<Table stickyHeader aria-label="sticky table">
 							<TableBody>
-								{posts.map((post:IPost) => {
-									return (
-										<TableRow>
-											<QuestionRow post={post}/>
-										</TableRow>
-									);
-								})}
+								<PaginatedItems itemsPerPage={10} items={posts} type="home"/>
 							</TableBody>
 						</Table>
 					</TableContainer>

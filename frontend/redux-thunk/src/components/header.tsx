@@ -72,23 +72,31 @@ function Header() {
 						</Link>
 					</Typography>
 					<SearchBar
+						className="header__searchbar"
 						value={data.search}
 						onChange={(newValue) => setData({ search: newValue })}
 						onRequestSearch={() => goSearch(data.search)}
 					/>
 					
 					{
-						userInfo.id ? (<Button
-							href="#"
-							color="primary"
-							variant="outlined"
-							className={classes.link}
-							component={NavLink}
-							onClick={handleLogout}
-							to="/logout"
-						>
-							Logout
-						</Button>) : (
+						userInfo.id ? (
+						<>
+							<a href="/user" className="avatar__icon-header">
+								<img src={userInfo.image} alt="" />
+							</a>
+							<Button
+								href="#"
+								color="primary"
+								variant="outlined"
+								className={classes.link}
+								component={NavLink}
+								onClick={handleLogout}
+								to="/logout"
+							>
+								Logout
+							</Button>
+						</>
+						) : (
 							<>
 								<nav>
 									<Link
@@ -101,6 +109,7 @@ function Header() {
 										Register
 									</Link>
 								</nav>
+								
 								<Button
 									href="#"
 									color="primary"

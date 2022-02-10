@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {State} from '../../reducers/index';
 import './user.css';
@@ -11,50 +11,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 
-import QuestionRow from '../molecules/QuestionRow';
+import axiosInstance from '../../axios';
+import PaginatedItems from '../molecules/QuestionPagination';
 
-const FAKE_DATA = [
-    {
-        id: 1,
-        title: "title",
-        comment: 2,
-        view: 24,
-        vote: 12,
-        created: '2 days ago',
-        author: {
-            id: 2,
-            first_name: "dungnt"
-        },
-        tags: ['javascript', 'css', 'html']
-    },
-    {
-        id: 2,
-        title: "title2",
-        comment: 3,
-        view: 25,
-        vote: 13,
-        created: '3 days ago',
-        author: {
-            id: 3,
-            first_name: "dungnt2"
-        },
-        tags: ['javascript', 'css']
-    },
-    {
-        id: 3,
-        title: "title3",
-        comment: 4,
-        view: 3,
-        vote: 32,
-        created: '4 days ago',
-        author: {
-            id: 4,
-            first_name: "dungnt4"
-        },
-        tags: ['css', 'html']
-    }
-            
-]
 function User(props:any) {
 
     const TabContext = React.createContext({});
@@ -90,7 +49,6 @@ function User(props:any) {
                             <InfoItem value = {userInfo.user_name} title='Username'/>
                             <InfoItem value = {userInfo.number_posts} title='Number posts'/>
                             <InfoItem value = {userInfo.about} title='About'/>
-
                         </div>
                         <div className='infor-right'>
                             <InfoItem value = {userInfo.contact} title='Contact'/>
@@ -110,10 +68,10 @@ function User(props:any) {
                     </Tabs>
                 </AppBar>
                 <TabPanel value={activeTab} index={0}>
-                    <ItemTab url='item 2'/> 
+                    <ItemTab url='item 2' type="own_question"/> 
                 </TabPanel>
                 <TabPanel value={activeTab} index={1}>
-                    <ItemTab url='item 3'/> 
+                    <ItemTab url='item 3' type="following"/> 
                 </TabPanel>
             </div>
         </Container>
@@ -146,6 +104,15 @@ function ItemTab(props:any) {
 		id: number,
 		first_name: string
 	}
+    const [type, setType] = useState(props.type);
+    const [data, setData] = useState([]);
+
+    useEffect(()=> {
+        const url = type == "own_question" ? "post_owner" : "post_following";
+        axiosInstance.get('/user/' + url).then((res) => {
+			setData(res.data.questions);
+		});
+    }, type)
 
 	interface IPost {
 		id: number,
@@ -157,18 +124,15 @@ function ItemTab(props:any) {
 		author: IAuthor,
 		tags: string[]
 	}
-
     return (
         <TableContainer>
             <Table stickyHeader aria-label="sticky table">
                 <TableBody>
-                    {FAKE_DATA.map((post:IPost) => {
-                        return (
-                            <TableRow>
-                                <QuestionRow post={post}/>
-                            </TableRow>
-                        );
-                    })}
+                    {data.length ? (
+                        <PaginatedItems itemsPerPage={5} items={data} type="user"/>
+                    ) : (
+                        <h3>No Posts</h3>
+                    )}
                 </TableBody>
             </Table>
         </TableContainer>

@@ -88,6 +88,56 @@ def get_top_list_question(request):
     return Response({'code': 200, 'questions': result})
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_own_question(request):
+    user = request.user
+    if not user:
+        return Response({'code': 200, 'questions': {}})
+    question_list = user.posts.filter(status='published')
+    if not question_list:
+        return Response({'code': 200, 'questions': {}})
+    result = []
+    for question in question_list:
+        author = question.author
+        result.append({
+            'id': question.id,
+            'comment': question.number_comment,
+            'view': question.view,
+            'vote': question.upvote - question.down_vote,
+            'title': question.title,
+            'created': str(question.created),
+            'author': {'id': author.id, 'first_name': author.first_name or author.user_name},
+            'tags': [tag.name for tag in question.tags.all()]
+        })
+    return Response({'code': 200, 'questions': result})
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_following_question(request):
+    user = request.user
+    if not user:
+        return Response({'code': 200, 'questions': {}})
+    question_list = user.follow_posts.filter(status='published')
+    if not question_list:
+        return Response({'code': 200, 'questions': {}})
+    result = []
+    for question in question_list:
+        author = question.author
+        result.append({
+            'id': question.id,
+            'comment': question.number_comment,
+            'view': question.view,
+            'vote': question.upvote - question.down_vote,
+            'title': question.title,
+            'created': str(question.created),
+            'author': {'id': author.id, 'first_name': author.first_name or author.user_name},
+            'tags': [tag.name for tag in question.tags.all()]
+        })
+    return Response({'code': 200, 'questions': result})
+
+
 # chi tiet question filter bang slug ->retrieve view api
 class QuestionDetail(generics.RetrieveAPIView):
     serializer_class = QuestionSerializer

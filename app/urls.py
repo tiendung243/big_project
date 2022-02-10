@@ -23,6 +23,8 @@ urlpatterns = [
     path('comment/vote', views.vote_comment, name='vote_comment'),
     path('post/follow', views.follow_post, name='follow_post'),
     path('comment/follow', views.follow_comment, name='follow_comment'),
+    path('user/post_owner', views.get_own_question, name='own_question'),
+    path('user/post_following', views.get_following_question, name='own_question'),
 ]
 
 """ Concrete View Classes

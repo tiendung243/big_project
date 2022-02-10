@@ -42,3 +42,13 @@ a {
     transform: rotate(360deg);
   }
 }
+
+
+.MuiTable-stickyHeader ul li {
+  padding: 5px;
+}
+
+.MuiTable-stickyHeader ul li a{
+  height: 34px;
+  font-size: 15px;
+}

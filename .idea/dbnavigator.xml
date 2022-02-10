@@ -27,6 +27,7 @@
     <loaded-nodes>
       <connection connection-id="7a41ae28-ff36-4dd2-a41d-871af1a8feb4">
         <schema name="itlearn4" object-types="table, view" />
+        <schema name="itlearn5" object-types="table, view" />
       </connection>
     </loaded-nodes>
   </component>
@@ -47,6 +48,7 @@
         <condition column="id" operator="!=" value="0" active="true" />
       </filter>
     </filter-actions>
+    <filter-actions connection-id="7a41ae28-ff36-4dd2-a41d-871af1a8feb4" dataset="itlearn5.accounts_authuser" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

@@ -1,0 +1,10 @@
+.avatar__icon-header img {
+    width: 36px;
+    height: 36px !important;
+    border-radius: 50%;
+    margin-left: 15px;
+}
+
+.header__searchbar {
+    height: 42px !important;
+}
