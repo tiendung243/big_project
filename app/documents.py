@@ -12,7 +12,6 @@ PUBLISHER_INDEX.settings(
 @PUBLISHER_INDEX.doc_type
 class QuestionDocument(Document):
     id = fields.IntegerField(attr='id')
-    fielddata = True
     content = fields.TextField(fields={
         "raw": {
             "type": 'keyword'
@@ -23,6 +22,7 @@ class QuestionDocument(Document):
             "type": 'keyword'
         }
     })
+    fielddata = True
 
     class Django:
         model = Question

@@ -22,17 +22,17 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'author', 'slug', 'excerpt', 'content')
 
 
-# class QuestionElasticSearchSerializer(DocumentSerializer):
-#     class Meta:
-#         model = Question
-#         document = QuestionDocument
-#         fields = ['title', 'content', 'id']
-#
-#         def get_location(self, obj):
-#             try:
-#                 return obj.location.to_dict()
-#             except:
-#                 return {}
+class QuestionElasticSearchSerializer(DocumentSerializer):
+    class Meta:
+        model = Question
+        document = QuestionDocument
+        fields = ['title', 'content', 'id']
+
+        def get_location(self, obj):
+            try:
+                return obj.location.to_dict()
+            except:
+                return {}
 
 
 class CommentSerializer(serializers.ModelSerializer):

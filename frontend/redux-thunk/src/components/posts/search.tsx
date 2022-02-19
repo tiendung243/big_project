@@ -2,48 +2,29 @@ import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../axios';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableContainer from '@material-ui/core/TableContainer';
 
-const useStyles = makeStyles((theme) => ({
-	cardMedia: {
-		paddingTop: '56.25%', // 16:9
-	},
-	link: {
-		margin: theme.spacing(1, 1.5),
-	},
-	cardHeader: {
-		backgroundColor:
-			theme.palette.type === 'light'
-				? theme.palette.grey[200]
-				: theme.palette.grey[700],
-	},
-	postTitle: {
-		fontSize: '16px',
-		textAlign: 'left',
-	},
-	postText: {
-		display: 'flex',
-		justifyContent: 'left',
-		alignItems: 'baseline',
-		fontSize: '12px',
-		textAlign: 'left',
-		marginBottom: theme.spacing(2),
-	},
-}));
+import PaginatedItems from '../molecules/QuestionPagination';
 
 const Search = () => {
-	const classes = useStyles();
 	const search = 'search';
+	interface IAuthor {
+		id: number,
+		first_name: string
+	}
     interface IPost {
         id: number,
-        title: string,
-        content: string,
+		title: string,
+		comment: number,
+		view: number,
+		vote: number,
+		created: string,
+		author: IAuthor,
+		tags: string[]
     }
     interface IAppState {
         search: string,
@@ -61,49 +42,20 @@ const Search = () => {
 			setAppState({...appState, posts: allPosts });
 		});
 	}, [setAppState]);
-
+	console.log("post_searched", appState.posts)
+	if (!appState.posts || appState.posts.length === 0) return <p>Can not find any posts.</p>;
 	return (
-		<React.Fragment>
-			<Container maxWidth="md" component="main">
-				<Grid container spacing={5} alignItems="flex-end">
-					{appState.posts.map((post) => {
-						return (
-							// Enterprise card is full width at sm breakpoint
-							<Grid item key={post.id} xs={12} md={4}>
-								<Card>
-									<Link
-										color="textPrimary"
-										href={'/post/' + post.id}
-										className={classes.link}
-									>
-										<CardMedia
-											className={classes.cardMedia}
-											image="https://source.unsplash.com/random"
-											title="Image title"
-										/>
-									</Link>
-									<CardContent>
-										<Typography
-											gutterBottom
-											variant="h6"
-											component="h2"
-											className={classes.postTitle}
-										>
-											{post.title.substr(0, 50)}...
-										</Typography>
-										<div className={classes.postText}>
-											<Typography color="textSecondary">
-												{post.content.substr(0, 40)}...
-											</Typography>
-										</div>
-									</CardContent>
-								</Card>
-							</Grid>
-						);
-					})}
-				</Grid>
-			</Container>
-		</React.Fragment>
+		<Container maxWidth="md" component="main" className="ListQuestionPage">
+			<Paper>
+				<TableContainer>
+					<Table stickyHeader aria-label="sticky table">
+						<TableBody>
+							<PaginatedItems itemsPerPage={10} items={appState.posts} type="home"/>
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</Paper>
+		</Container>
 	);
 };
 export default Search;

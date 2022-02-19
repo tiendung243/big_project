@@ -1,13 +1,10 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
 from rest_framework import generics, viewsets
 from .models import *
-from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, \
-    BasePermission, IsAdminUser, DjangoModelPermissions
+from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated, \
+    BasePermission, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, permission_classes
-from .serializers import QuestionSerializer, CommentSerializer
-# , QuestionElasticSearchSerializer
+from .serializers import QuestionSerializer, CommentSerializer, QuestionElasticSearchSerializer
 from rest_framework import filters
 from datetime import datetime
 from django.db.models import F
@@ -20,27 +17,23 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 from .documents import QuestionDocument
 
 
-# class PublisherDocumentView(DocumentViewSet):
-#     permission_classes = [AllowAny]
-#     document = QuestionDocument
-#     serializer_class = QuestionElasticSearchSerializer
-#     fielddata = True
-#
-#     filter_backends = [
-#         FilteringFilterBackend,
-#         CompoundSearchFilterBackend
-#     ]
-#
-#     search_fields = ('title', 'content')
-#     multi_match_search_fields = ('title', 'content')
-#     filter_fields = {
-#         'title': 'title',
-#         'content': 'content',
-#     }
-#     fields_fields = {
-#         'title': 'title',
-#         'content': 'content',
-#     }
+class PublisherDocumentView(DocumentViewSet):
+    permission_classes = [AllowAny]
+    document = QuestionDocument
+    serializer_class = QuestionElasticSearchSerializer
+    fielddata = True
+
+    filter_backends = [
+        FilteringFilterBackend,
+        CompoundSearchFilterBackend
+    ]
+
+    search_fields = ('title', 'content')
+    multi_match_search_fields = ('title', 'content')
+    filter_fields = {
+        'title': 'title',
+        'content': 'content',
+    }
 
 
 class UserWritePermission(BasePermission):
@@ -350,7 +343,7 @@ def get_question(request, question_id=None):
                      'author': {
                          'first_name': author_question.first_name or author_question.user_name,
                          'last_name': author_question.last_name,
-                         'image': author_question.image.name,
+                         'image': author_question.get_absolute_image_url,
                          'user_name': author_question.user_name,
                          'use_full_comment': author_question.use_full_comment,
                          'id': author_question.pk

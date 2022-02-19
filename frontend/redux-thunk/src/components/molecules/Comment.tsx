@@ -51,7 +51,7 @@ function Comment(props:any) {
 		setPostReply(e.target.value);
 	}
 
-    function updateFollowing(){
+    function updateFollowing() {
         console.log('update following', following);
         setFollowing(!following);
     }
